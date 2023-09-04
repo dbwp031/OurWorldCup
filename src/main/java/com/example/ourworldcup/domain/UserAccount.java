@@ -12,10 +12,7 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @Entity
 public class UserAccount extends AuditingFields {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(nullable = false, length = 100) private String userId;
     @Column(nullable = false, length = 100) private String username;
     @Column(length = 100) private String nickname;

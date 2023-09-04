@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @Entity
 public class Worldcup extends AuditingFields{
-    @Id @GeneratedValue(stra    tegy = GenerationType.IDENTITY) private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(nullable = false, length = 100) private String password;
     @Column(nullable = false, length=100) private String title;
     @Column(length = 10000) private String content;

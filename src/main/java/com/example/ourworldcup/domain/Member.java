@@ -13,10 +13,7 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @Entity
 public class Member extends AuditingFields{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @ManyToOne(optional = false) @JoinColumn(name="user_account_id") private UserAccount userAccount;
     @ManyToOne(optional = false) @JoinColumn(name="worldcup_id") private Worldcup worldcup;
     @Column(nullable = false) MemberRole memberRole;
