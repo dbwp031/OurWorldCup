@@ -1,10 +1,14 @@
 package com.example.ourworldcup.domain;
 
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 
+@Builder
+@Getter
+@AllArgsConstructor(access= AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
 public class UserAccount extends AuditingFields {
@@ -16,19 +20,6 @@ public class UserAccount extends AuditingFields {
     @Column(nullable = false, length = 100) private String username;
     @Column(length = 100) private String nickname;
     @Column(length = 100) private String email;
-
-    private UserAccount(){}
-
-    private UserAccount(String userId, String username, String nickname, String email) {
-        this.userId = userId;
-        this.username = username;
-        this.nickname = nickname;
-        this.email = email;
-    }
-
-    public static UserAccount of(String userId, String username, String nickname, String email) {
-        return new UserAccount(userId, username, nickname, email);
-    }
 
     @Override
     public boolean equals(Object o) {

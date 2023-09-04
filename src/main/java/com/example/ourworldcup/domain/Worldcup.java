@@ -1,29 +1,21 @@
 package com.example.ourworldcup.domain;
 
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
-
+@Builder
+@Getter
+@AllArgsConstructor(access= AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
 public class Worldcup extends AuditingFields{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Id @GeneratedValue(stra    tegy = GenerationType.IDENTITY) private Long id;
+    @Column(nullable = false, length = 100) private String password;
     @Column(nullable = false, length=100) private String title;
     @Column(length = 10000) private String content;
-
-    private Worldcup() {}
-    private Worldcup(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public static Worldcup of(String title, String content) {
-        return new Worldcup(title, content);
-    }
+    @Column(nullable=false, length=255) private String invitationCode;
 
     @Override
     public boolean equals(Object o) {

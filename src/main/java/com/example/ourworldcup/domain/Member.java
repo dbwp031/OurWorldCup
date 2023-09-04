@@ -2,11 +2,15 @@ package com.example.ourworldcup.domain;
 
 import com.example.ourworldcup.domain.constant.MemberRole;
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 
-@ToString
+@Builder
+@Getter
+@AllArgsConstructor(access= AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(callSuper = true)
 @Entity
 public class Member extends AuditingFields{
     @Id
@@ -16,17 +20,6 @@ public class Member extends AuditingFields{
     @ManyToOne(optional = false) @JoinColumn(name="user_account_id") private UserAccount userAccount;
     @ManyToOne(optional = false) @JoinColumn(name="worldcup_id") private Worldcup worldcup;
     @Column(nullable = false) MemberRole memberRole;
-
-    private Member(){}
-    private Member(UserAccount userAccount, Worldcup worldcup, MemberRole memberRole) {
-        this.userAccount = userAccount;
-        this.worldcup = worldcup;
-        this.memberRole = memberRole;
-    }
-
-    public static Member of(UserAccount userAccount, Worldcup worldcup, MemberRole memberRole) {
-        return new Member(userAccount, worldcup, memberRole);
-    }
 
     @Override
     public boolean equals(Object o) {
