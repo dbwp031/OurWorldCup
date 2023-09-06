@@ -1,0 +1,21 @@
+/*.box01{*/
+/*    text-align: left;*/
+/*}*/
+/*.box01 input{*/
+/*    border: none;*/
+/*    font-size: 15px;*/
+/*    outline: none;*/
+/*    text-align: center;*/
+/*}*/
+.box01 button{
+    border:none;
+    width:60px;
+    max-width: 100px;
+    vertical-align: bottom;
+}
+.box01 button img{
+    width: 100%;
+}
+.box01 span {
+    background-color: #F0F0F0;
+}
