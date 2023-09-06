@@ -1,18 +1,67 @@
 spring:
-  sql.init.mode: always
+  profiles:
+    include:
+      - aws
+    active: local
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 30MB
+  datasource:
+    hikari:
+      maximum-pool-size: 25
+# TODO: 이후 비동기 처리 때 추가
+#  task:
+#    execution:
+#      pool:
+#        # CORE 스레드 수
+#        core-size: 8
+#        # 스레드 최대 개수
+#        max-size: 8
+
+---
+spring:
+  config:
+    activate:
+      on-profile: localDev
   datasource:
     url: jdbc:mysql://localhost:3306/our_worldcup
     username: root
     password: root
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    generate-ddl: true
-    show-sql: true
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create
-    open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
         format_sql: true
+        # hinernate가 생성되는 sql 쿼리에 주석을 추가함.
+        use_sql_comments: true
+        hbm2ddl:
+          auto: update
+          default_batch_fetch_size: 1000
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/our_worldcup
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        hbm2ddl:
+          auto: create
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+  sql.init.mode: always
