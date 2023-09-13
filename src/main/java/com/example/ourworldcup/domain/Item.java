@@ -11,7 +11,7 @@ import lombok.*;
 @Entity
 public class Item extends AuditingFields{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @Column(nullable = false, length=100) String title;
-    @Column(nullable = false, length = 36) private String imageUuid;
-    @Column(length=255) String description;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "worldcup_id") private Worldcup worldcup;
+    @Setter @OneToOne @JoinColumn(name = "item_image_id") private ItemImage itemImage;
+    @Column(nullable = false, length=100) private String title;
 }

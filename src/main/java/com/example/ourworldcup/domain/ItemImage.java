@@ -10,8 +10,7 @@ import lombok.*;
 @Entity
 public class ItemImage extends AuditingFields{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @OneToOne @JoinColumn(name = "uuid_id") private Uuid uuid;
     private String fileName;
     private String url;
-    @OneToOne @JoinColumn(name = "uuid_id") private Uuid uuid;
-    @OneToOne @JoinColumn(name = "item_id") private Item item;
 }
