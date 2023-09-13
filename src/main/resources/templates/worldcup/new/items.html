@@ -62,11 +62,11 @@
             </tr>
             </thead>
               <tbody>
-                <tr th:each="item, iterStat: ${session.items}">
+                <tr th:each="item, iterStat: ${worldcupItemsDto.getItems()}">
                   <th scope="row" th:text="${iterStat.count}"></th>
-                  <td th:text="${item.getTitle()}">Mark</td>
+                  <td th:text="${item.key}">Mark</td>
 <!--                  <td><img src="" alt=""></td>-->
-                  <td th:text="${item.getDescription()}">@mdo</td>
+                  <td><img th:src="${item.value}" alt="Image" width="100" height="100"></td>
                 </tr>
             </tbody>
           </table>

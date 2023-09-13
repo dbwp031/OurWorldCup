@@ -52,26 +52,22 @@
                 <h4>월드컵 아이템 추가</h4>
                 <p> <small><em>월드컵 게임에 사용될 아이템들을 추가해주세요. 아이템 추가 버튼을 누르면 아이템 리스트에 담기게 됩니다.
                 이미지 아이템의 경우, 다음 페이지에서 아이템의 제목을 작성해주세요.</em></small></p>
-           <form action="/worldcup/new/image-item" method="post" role="form" enctype="multipart/form-data" class="php-email-form">
-             <div>
-               <input type="file" id="fileInput" name="images" accept="image/*" multiple onchange="displayFiles()">
+           <form action="/worldcup/new/item" method="post" role="form" enctype="multipart/form-data" class="php-email-form">
+             <div class="form-group mt-3">
+               <label for="new-item-title">아이템 제목</label>
+               <input type="text" name="title" class="form-control" id="new-item-title" placeholder="텍스트 아이템 제목을 작성해주세요. (ex. 5년 전으로 돌아가기 (대신 대머리됨))" required>
              </div>
+             <div>
+               <label for="new-item-image">아이템 이미지</label>
+               <div>
+                 <input type="file" id="new-item-image" name="image" accept="image/*" multiple onchange="displayFiles()">
+               </div>
+               </div>
              <div>
                <ul id="fileList"></ul>
              </div>
-<!--               <h6>이미지 아이템 추가</h6>-->
-<!--                <div class="dropBox">-->
-<!--                  <h1>이곳에 파일을 드롭해주세요.</h1>-->
-<!--                </div>-->
-             <button type="submit" class="btn-small">이미지 아이템 등록</button>
+             <button type="submit" class="btn-small">아이템 등록</button>
            </form >
-           <form action="/worldcup/new/text-item" method="post" role="form" class="php-email-form">
-             <div class="form-group mt-3">
-               <label for="add-text-item">텍스트 아이템 추가</label>
-               <input type="text" name="title" class="form-control" id="add-text-item" placeholder="텍스트 아이템 제목을 작성해주세요. (ex. 5년 전으로 돌아가기 (대신 대머리됨))" required>
-             </div>
-             <button type="submit" class="btn-small">텍스트 아이템 등록</button>
-           </form>
            <form action="/worldcup/new/add-item" method="post" role="form" class="php-email-form">
              <div class="text-center"><button type="submit">월드컵 생성하기 [2/4]</button></div>
            </form>
