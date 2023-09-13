@@ -14,7 +14,7 @@ public class ItemDto {
     private String description;
     private MultipartFile image;
 
-    public static ItemDto of(ItemRequestDto.ImageItemCreateRequestDto createRequestDto) {
+    public static ItemDto of(ItemRequestDto.ItemCreateRequestDto createRequestDto) {
         return ItemDto.builder()
                 .image(createRequestDto.getImage())
                 .title(null)

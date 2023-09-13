@@ -3,6 +3,8 @@ package com.example.ourworldcup.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 @Builder
 @Getter
@@ -16,6 +18,12 @@ public class Worldcup extends AuditingFields{
     @Column(nullable = false, length=100) private String title;
     @Column(length = 10000) private String content;
     @Column(nullable=false, length=255) private String invitationCode;
+
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    @Builder.Default
+    private List<Item> items = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

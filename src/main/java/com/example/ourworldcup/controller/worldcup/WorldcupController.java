@@ -1,35 +1,31 @@
 package com.example.ourworldcup.controller.worldcup;
 
-import com.example.ourworldcup.controller.item.dto.ItemDto;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
-import com.example.ourworldcup.controller.worldcup.dto.WorldcupInfoRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
-import com.example.ourworldcup.service.ItemService;
+import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
+import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.service.worldcup.WorldcupService;
+import com.example.ourworldcup.service.item.ItemService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/worldcup")
 @Controller
 public class WorldcupController {
-    private static final String SESSION_ATTR_WORLDCUPINFO = "worldcupCreateRequestDto";
+    private static final String SESSION_ATTR_WORLDCUP = "worldcup";
     private static final String SESSION_ATTR_ITEMS = "items";
 
     private final ItemService itemService;
+    private final WorldcupService worldcupService;
     // worldcup 생성 페이지 - GetMapping
     @GetMapping("/new")
-
-    public String worldcupAdd(HttpSession httpSession) {
-        httpSession.setAttribute(SESSION_ATTR_WORLDCUPINFO, null);
-        httpSession.setAttribute(SESSION_ATTR_ITEMS, new ArrayList<ItemDto>());
+    public String worldcupAdd() {
         return "forward:/worldcup/new/worldcup-info";
     }
 
@@ -44,7 +40,8 @@ public class WorldcupController {
     }
 
     @GetMapping("/new/items")
-    public String renderWorldcupItemsCreationForm() {
+    public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) {
+        map.addAttribute("worldcupItemsDto", worldcupService.toWorldcupItemsDto((Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP)));
         return "/worldcup/new/items";
     }
 
@@ -58,7 +55,8 @@ public class WorldcupController {
     public String saveWorldcupInfo_redirectWorldcupAddItemCreationForm(
             @ModelAttribute WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto,
             HttpSession httpSession) {
-        httpSession.setAttribute("worldcupCreateRequestDto", worldcupCreateRequestDto);
+        Worldcup worldcup = worldcupService.createWorldcup(worldcupCreateRequestDto);
+        httpSession.setAttribute(SESSION_ATTR_WORLDCUP, worldcup);
         return "redirect:/worldcup/new/add-item";
     }
 
@@ -67,34 +65,15 @@ public class WorldcupController {
         return "redirect:/worldcup/new/items";
     }
 
-    @PostMapping("/new/image-item")
+    @PostMapping("/new/item")
     public String saveImageItems_redirectWorldcupItemCreationForm(
-            @ModelAttribute ItemRequestDto.ImageItemsCreateRequestDto imagesDto,
+            @ModelAttribute ItemRequestDto.ItemCreateRequestDto itemCreateRequestDto,
             HttpSession httpSession
     ) {
-        List<ItemDto> items = (List<ItemDto>) httpSession.getAttribute(SESSION_ATTR_ITEMS);
-        System.out.println(items.toString());
-        for (MultipartFile image : imagesDto.getImages()) {
-            items.add(ItemDto.builder()
-                    .image(image)
-                    .build());
-        }
+        itemService.saveItem(itemCreateRequestDto,
+                (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP));
         return "redirect:/worldcup/new/add-item";
     }
-
-    @PostMapping("/new/text-item")
-    public String saveText_redirectWorldcupItemCreationForm(
-            @ModelAttribute ItemRequestDto.TextItemCreateRequestDto textDto,
-            HttpSession httpSession
-    ) {
-        List<ItemDto> items = (List<ItemDto>) httpSession.getAttribute(SESSION_ATTR_ITEMS);
-        System.out.println(items.toString());
-        items.add(ItemDto.builder()
-                .title(textDto.getTitle())
-                .build());
-        return "redirect:/worldcup/new/add-item";
-    }
-
 //
 //    @PostMapping("/new/invite")
 //    public String worldcupInvite() {

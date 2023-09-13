@@ -11,25 +11,8 @@ public class ItemRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @ToString
-    public static class TextItemCreateRequestDto {
+    public static class ItemCreateRequestDto {
         private String title;
-    }
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @ToString
-    public static class ImageItemsCreateRequestDto {
-        private MultipartFile[] images;
-    }
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @ToString
-    public static class ImageItemCreateRequestDto {
         private MultipartFile image;
     }
 }
