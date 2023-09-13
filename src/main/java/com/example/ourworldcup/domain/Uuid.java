@@ -10,6 +10,5 @@ import lombok.*;
 @Entity
 public class Uuid extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @Column(unique = true)
-    private String uuid;
+    @Column(unique = true) private String uuid;
 }
