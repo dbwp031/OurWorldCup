@@ -19,9 +19,8 @@ public class Worldcup extends AuditingFields{
     @Column(length = 10000) private String content;
     @Column(nullable=false, length=255) private String invitationCode;
 
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
     private List<Item> items = new ArrayList<>();
 
