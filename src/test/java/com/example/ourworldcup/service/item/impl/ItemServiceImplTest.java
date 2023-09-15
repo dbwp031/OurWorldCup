@@ -7,6 +7,7 @@ import com.example.ourworldcup.domain.ItemImage;
 import com.example.ourworldcup.domain.Uuid;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.repository.item.ItemRepository;
+import com.example.ourworldcup.repository.uuid.UuidRepository;
 import com.example.ourworldcup.service.fileProcess.ItemImageProcess;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
@@ -35,7 +37,7 @@ class ItemServiceImplTest {
     ItemImageProcess itemImageProcess;
 
     @Mock
-    ItemImagePackageMetadata itemImagePackageMetadata;
+    UuidRepository uuidRepository;
 
     @Test
     void given_when_then() throws IOException {
@@ -45,7 +47,7 @@ class ItemServiceImplTest {
         Long itemId = 1L;
         String realUuid = "uuid string";
         String fileName = "itemImage filename";
-
+        String itemImageUrl = "itemImage url";
         String worldcup_title = "worldcup title";
         Worldcup worldcup = Worldcup.builder()
                 .id(worldcupId)
@@ -71,9 +73,10 @@ class ItemServiceImplTest {
                 .id(1L)
                 .uuid(realUuid)
                 .build();
+
         ItemImage itemImage = ItemImage.builder()
                 .id(1L)
-                .url("itemImage url")
+                .url(itemImageUrl)
                 .fileName(fileName)
                 .uuid(uuid).build();
 
@@ -82,11 +85,11 @@ class ItemServiceImplTest {
                 .worldcup(worldcup)
                 .title(itemTitle)
                 .itemImage(itemImage).build();
-        worldcup.getItems().add(item);
 
 
         given(itemRepository.checkExistByItemTitleInSameWorldcup(worldcupId, itemTitle)).willReturn(false);
-        given(itemImageProcess.uploadImageAndMapToItem(mockMultipartFile, itemImagePackageMetadata, item)).willReturn(item);
+        given(itemImageProcess.uploadImageAndMapToItem(any(MultipartFile.class), any(ItemImagePackageMetadata.class), any(Item.class))).willReturn(item);
+
         //when
         sut.saveItem(itemCreateRequestDto, worldcup);
 
