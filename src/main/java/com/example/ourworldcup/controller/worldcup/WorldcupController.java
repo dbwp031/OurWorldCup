@@ -1,28 +1,36 @@
 package com.example.ourworldcup.controller.worldcup;
 
+import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
+import com.example.ourworldcup.converter.item.ItemConverter;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.service.item.ItemService;
+import com.example.ourworldcup.util.ItemUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/worldcup")
 @Controller
-public class WorldcupController {
+public class    WorldcupController {
     private static final String SESSION_ATTR_WORLDCUP = "worldcup";
     private static final String SESSION_ATTR_ITEMS = "items";
 
     private final ItemService itemService;
     private final WorldcupService worldcupService;
+    private final ItemConverter itemConverter;
+    private final FileService fileService;
     // worldcup 생성 페이지 - GetMapping
     @GetMapping("/new")
     public String worldcupAdd() {
@@ -40,8 +48,18 @@ public class WorldcupController {
     }
 
     @GetMapping("/new/items")
-    public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) {
-        map.addAttribute("worldcupItemsDto", worldcupService.toWorldcupItemsDto((Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP)));
+    public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) throws Exception {
+        Worldcup worldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
+        WorldcupResponseDto.WorldcupItemsDto worldcupItemsDto = new WorldcupResponseDto.WorldcupItemsDto();
+        List<WorldcupResponseDto.WorldcupItemDto> itemsDto = worldcup.getItems().stream().map(a -> {
+            try {
+                return itemConverter.toWorldcupItemDto(a, fileService);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+        worldcupItemsDto.setItems(itemsDto);
+        map.addAttribute("worldcupItemsDto", worldcupItemsDto);
         return "/worldcup/new/items";
     }
 
