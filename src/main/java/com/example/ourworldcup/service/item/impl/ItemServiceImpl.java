@@ -19,14 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 @Slf4j
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UuidRepository uuidRepository;
     private final ItemImageProcess  itemImageProcess;
-    private final FileService fileService;
 
     @Override
     @Transactional
@@ -36,11 +35,13 @@ public class ItemServiceImpl implements ItemService {
         if (isExist) {
             throw new IllegalStateException(String.format("이미 같은 이름의 아이템이 월드컵에 추가되어 있습니다. (TITLE: %s)", itemTitle));
         } else {
-
             Item item = Item.builder()
                     .worldcup(worldcup)
                     .title(itemTitle)
                     .build();
+            System.out.println("아이템 추가 전: "+ worldcup.getItems().toString());
+            worldcup.addItem(item);
+            System.out.println("아이템 추가 후: "+ worldcup.getItems().toString());
 
             String uuid = UUID.randomUUID().toString();
             Uuid uuidEntity = Uuid.builder()
@@ -53,11 +54,16 @@ public class ItemServiceImpl implements ItemService {
 
             item = itemImageProcess.uploadImageAndMapToItem(itemCreateRequestDto.getImage(), itemImagePackageMetadata, item);
 
-            worldcup.getItems().add(item);
             uuidRepository.save(uuidEntity);
             itemRepository.save(item);
             return item;
         }
+    }
+
+    @Transactional
+    @Override
+    public void deleteItem(Long id) {
+        itemRepository.deleteById(id);
     }
 
 

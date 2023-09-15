@@ -7,6 +7,7 @@ import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.domain.Item;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.repository.WorldcupRepository;
+import com.example.ourworldcup.repository.item.ItemRepository;
 import com.example.ourworldcup.service.item.ItemImageService;
 import com.example.ourworldcup.service.item.impl.ItemImageServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 public class WorldcupServiceImpl implements WorldcupService{
     private final WorldcupRepository worldcupRepository;
+    private final ItemRepository itemRepository;
     private final ItemImageService itemImageService;
     private final FileService fileService;
     @Override
@@ -35,20 +37,4 @@ public class WorldcupServiceImpl implements WorldcupService{
         worldcupRepository.save(worldcup);
         return worldcup;
     }
-
-    @Transactional
-    @Override
-    public void deleteItem(Long worldcupId, Long itemId) {
-        Worldcup worldcup = worldcupRepository.findById(worldcupId)
-                .orElseThrow(() -> new IllegalArgumentException("worldcup이 없습니다.: worldcup ID: " + worldcupId));
-        System.out.println(worldcup.toString());
-        Item item = worldcup.getItems().stream()
-                .filter(itemDeleted -> itemDeleted.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("aaitem이 없습니다.: item ID: " + itemId));
-        fileService.deleteFile(item.getItemImage().getFileName());
-        worldcup.getItems().remove(item);
-    }
-
-
 }

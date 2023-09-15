@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 public interface ItemService {
     Item saveItem(ItemRequestDto.ItemCreateRequestDto itemCreateRequestDto, Worldcup worldcup);
 
+    void deleteItem(Long id);
 }
