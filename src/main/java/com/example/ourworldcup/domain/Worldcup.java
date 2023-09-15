@@ -36,4 +36,9 @@ public class Worldcup extends AuditingFields{
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Item addItem(Item item) {
+        this.items.add(item);
+        return item;
+    }
 }
