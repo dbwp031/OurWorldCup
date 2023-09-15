@@ -65,3 +65,7 @@ spring:
     defer-datasource-initialization: true
 
   sql.init.mode: always
+
+#logging:
+#  level:
+#    root: debug

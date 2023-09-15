@@ -12,4 +12,6 @@ public interface ItemRepository extends
         ItemCustomRepository {
     @Query("select item from Item item where item.worldcup.id = :worldcupId")
     Optional<Item> findItemByWorldcupId(@Param("worldcupId") Long worldcupId);
+
+    void deleteById(Long id);
 }

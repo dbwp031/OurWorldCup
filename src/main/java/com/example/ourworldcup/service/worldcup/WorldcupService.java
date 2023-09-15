@@ -10,5 +10,5 @@ import java.util.List;
 public interface WorldcupService {
     Worldcup createWorldcup(WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto);
 
-    WorldcupResponseDto.WorldcupItemsDto toWorldcupItemsDto(Worldcup worldcup);
+    void deleteItem(Long worldcupId, Long itemId);
 }

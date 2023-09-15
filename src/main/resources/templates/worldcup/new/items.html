@@ -52,21 +52,22 @@
             <h4>아이템 리스트</h4>
             <p> <small><em>등록한 아이템들을 확인해주세요. 이미지 아이템들은 제목을 정해주세요.</em></small></p>
 
-            <table class="table">
+            <table class="table" id="item-table">
             <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Title</th>
               <th scope="col">Image</th>
-              <th scope="col">Description</th>
+              <th scope="col">Delete</th>
             </tr>
             </thead>
               <tbody>
-                <tr th:each="item, iterStat: ${worldcupItemsDto.getItems()}">
+                <tr th:each="item, iterStat: ${worldcupItemsDto.getItems()}" th:data-id="${item.getId()}">
                   <th scope="row" th:text="${iterStat.count}"></th>
-                  <td th:text="${item.key}">Mark</td>
+                  <td th:text="${item.getTitle()}">Mark</td>
 <!--                  <td><img src="" alt=""></td>-->
-                  <td><img th:src="${item.value}" alt="Image" width="100" height="100"></td>
+                  <td><img th:src="${item.getBase64Image()}" alt="Image" width="100" height="100"></td>
+                  <td><button class="delete-row-btn">Delete</button></td>
                 </tr>
             </tbody>
           </table>
@@ -98,7 +99,8 @@
   <script src="/assets/js/main.js"></script>
   <script src="/js/worldcup_password.js"></script>
   <script src="/js/drag_drop.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/worldcup/new/items.js"></script>
 </body>
 
 </html>

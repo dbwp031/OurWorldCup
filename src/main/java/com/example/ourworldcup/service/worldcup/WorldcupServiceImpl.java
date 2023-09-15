@@ -1,6 +1,7 @@
 package com.example.ourworldcup.service.worldcup;
 
 import com.example.ourworldcup.aws.s3.AmazonS3Service;
+import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.domain.Item;
@@ -21,7 +22,7 @@ import java.util.List;
 public class WorldcupServiceImpl implements WorldcupService{
     private final WorldcupRepository worldcupRepository;
     private final ItemImageService itemImageService;
-    private final AmazonS3Service amazonS3Service;
+    private final FileService fileService;
     @Override
     public Worldcup createWorldcup(WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto) {
         // TODO: invitationCode 생성 및 저장 수정해야함.
@@ -35,15 +36,19 @@ public class WorldcupServiceImpl implements WorldcupService{
         return worldcup;
     }
 
+    @Transactional
     @Override
-    public WorldcupResponseDto.WorldcupItemsDto toWorldcupItemsDto(Worldcup worldcup) {
-        WorldcupResponseDto.WorldcupItemsDto worldcupItemsDto = WorldcupResponseDto.WorldcupItemsDto.builder().build();
-        for (Item item : worldcup.getItems()) {
-            worldcupItemsDto.getItems().put(item.getTitle(), itemImageService.loadBase64Image(item));
-        }
-        return worldcupItemsDto;
+    public void deleteItem(Long worldcupId, Long itemId) {
+        Worldcup worldcup = worldcupRepository.findById(worldcupId)
+                .orElseThrow(() -> new IllegalArgumentException("worldcup이 없습니다.: worldcup ID: " + worldcupId));
+        System.out.println(worldcup.toString());
+        Item item = worldcup.getItems().stream()
+                .filter(itemDeleted -> itemDeleted.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("aaitem이 없습니다.: item ID: " + itemId));
+        fileService.deleteFile(item.getItemImage().getFileName());
+        worldcup.getItems().remove(item);
     }
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.ourworldcup.service.item.impl;
 
+import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.aws.s3.metadata.ItemImagePackageMetadata;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.domain.Item;
@@ -8,16 +9,16 @@ import com.example.ourworldcup.domain.Uuid;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.repository.item.ItemRepository;
 import com.example.ourworldcup.repository.uuid.UuidRepository;
-import com.example.ourworldcup.service.fileProcess.FileProcessService;
 import com.example.ourworldcup.service.fileProcess.ItemImageProcess;
 import com.example.ourworldcup.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
-
+@Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -25,6 +26,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UuidRepository uuidRepository;
     private final ItemImageProcess  itemImageProcess;
+    private final FileService fileService;
+
     @Override
     @Transactional
     public Item saveItem(ItemRequestDto.ItemCreateRequestDto itemCreateRequestDto, Worldcup worldcup) {
