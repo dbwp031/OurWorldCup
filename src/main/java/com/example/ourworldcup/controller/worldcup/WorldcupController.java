@@ -49,6 +49,7 @@ public class    WorldcupController {
 
     @GetMapping("/new/items")
     public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) throws Exception {
+
         Worldcup worldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
         WorldcupResponseDto.WorldcupItemsDto worldcupItemsDto = new WorldcupResponseDto.WorldcupItemsDto();
         List<WorldcupResponseDto.WorldcupItemDto> itemsDto = worldcup.getItems().stream().map(a -> {
@@ -62,11 +63,19 @@ public class    WorldcupController {
         map.addAttribute("worldcupItemsDto", worldcupItemsDto);
         return "/worldcup/new/items";
     }
-
+    //
     @GetMapping("/new/invite")
-    public String renderWorldcupInvitationCreationForm() {
+    public String worldcupInvite(HttpSession httpSession) {
+        // TODO: 로그인 기능을 추가해서 유저 아이디를 받을 수 있도록 해야 한다. (임시 처리)
+        httpSession.setAttribute("userId", "testUserId");
+
         return "/worldcup/new/invite";
     }
+
+//    @GetMapping("/new/invite")
+//    public String renderWorldcupInvitationCreationForm() {
+//        return "/worldcup/new/invite";
+//    }
 
     // worldcup 생성 페이지 - PostMapping
     @PostMapping("/new/worldcup-info")
@@ -92,9 +101,5 @@ public class    WorldcupController {
                 (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP));
         return "redirect:/worldcup/new/add-item";
     }
-//
-//    @PostMapping("/new/invite")
-//    public String worldcupInvite() {
-//        return "redirect:/worldcup/new/invite";
-//    }
+
 }
