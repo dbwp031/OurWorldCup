@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +39,7 @@ class ItemServiceImplTest {
 
     @Mock
     UuidRepository uuidRepository;
+
 
     @Test
     void given_when_then() throws IOException {
@@ -95,5 +97,40 @@ class ItemServiceImplTest {
 
         //then
         assertThat(worldcup.getItems()).hasSize(1);
+    }
+
+    @DisplayName("월드컵 번호와 아이템 번호가 주어지면, 아이템이 삭제된다.")
+    @Test
+    void givenWorldcupIdAndItemId_whenDeletesItem_thenCorrectlyDeletesItem() {
+        //given
+        Long worldcupId = 1L;
+        Long itemId = 1L;
+        String realUuid = "uuid string";
+        String fileName = "itemImage filename";
+        Worldcup worldcup = Worldcup.builder()
+                .id(worldcupId)
+                .title("worldcup title")
+                .content("worldcup content")
+                .password("worldcup password").build();
+        Uuid uuid = Uuid.builder()
+                .id(1L)
+                .uuid(realUuid)
+                .build();
+        ItemImage itemImage = ItemImage.builder()
+                .id(1L)
+                .url("itemImage url")
+                .fileName(fileName)
+                .uuid(uuid).build();
+
+        Item item = Item.builder()
+                .id(itemId)
+                .worldcup(worldcup)
+                .title("item title")
+                .itemImage(itemImage).build();
+        worldcup.getItems().add(item);
+        //when
+        sut.deleteItem(itemId);
+        //then
+        assertThat(worldcup.getItems()).doesNotContain(item);
     }
 }
