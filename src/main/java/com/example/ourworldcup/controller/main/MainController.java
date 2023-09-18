@@ -15,6 +15,6 @@ public class MainController {
         if (!httpSession.getAttribute("userId").equals(userId)) {
             throw new RuntimeException("유저 아이디가 올바르지 않습니다.");
         }
-        return "/main/after_login";
+        return "user";
     }
 }
