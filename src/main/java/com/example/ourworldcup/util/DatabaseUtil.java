@@ -1,9 +1,12 @@
 package com.example.ourworldcup.util;
 
+import com.example.ourworldcup.domain.auth.AuthProvider;
 import com.example.ourworldcup.domain.auth.Authority;
 import com.example.ourworldcup.domain.auth.Role;
+import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.AuthorityType;
 import com.example.ourworldcup.domain.enums.RoleType;
+import com.example.ourworldcup.repository.AuthProviderRepository;
 import com.example.ourworldcup.repository.AuthorityRepository;
 import com.example.ourworldcup.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DatabaseUtil {
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
+    private final AuthProviderRepository authProviderRepository;
 
     @Transactional
     @PostConstruct
@@ -35,8 +39,17 @@ public class DatabaseUtil {
                     .build();
             roleRepository.save(role);
         }
-        log.info("Type Entity 생성 완료. AuthorityType: {}개, RoleType: {}개",
+        for (AuthProviderType authProviderType : AuthProviderType.values()) {
+            AuthProvider authProvider = AuthProvider.builder()
+                    .authProviderType(authProviderType)
+                    .build();
+            authProviderRepository.save(authProvider);
+        }
+
+        log.info("Type Entity 생성 완료. AuthorityType: {}개, RoleType: {}개, AuthProviderType: {}개",
                 AuthorityType.values().length,
-                RoleType.values().length);
+                RoleType.values().length,
+                AuthProviderType.values().length
+                );
     }
 }
