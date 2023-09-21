@@ -1,6 +1,7 @@
 package com.example.ourworldcup.domain;
 
 import com.example.ourworldcup.domain.constant.MemberRole;
+import com.example.ourworldcup.domain.userAccount.UserAccount;
 import jakarta.persistence.*;
 import lombok.*;
 

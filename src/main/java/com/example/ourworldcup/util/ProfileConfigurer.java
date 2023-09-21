@@ -34,7 +34,8 @@ public class ProfileConfigurer {
             }
         }
         if (activeProfile.equals("dev") || activeProfile.equals("localDev")) {
-            bucket = environment.getProperty("cloud.aws.s3.dev-bucket");
+//            bucket = environment.getProperty("cloud.aws.s3.dev-bucket");
+            bucket = environment.getProperty("cloud.aws.s3.bucket");
         } else {
             bucket = environment.getProperty("cloud.aws.s3.bucket");
         }

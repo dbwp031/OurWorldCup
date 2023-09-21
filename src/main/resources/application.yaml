@@ -2,15 +2,56 @@ spring:
   profiles:
     include:
       - aws
-    active: local
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 20MB
-      max-request-size: 30MB
-  datasource:
-    hikari:
-      maximum-pool-size: 25
+      - dev
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: kakao
+            client-id: ${CLIENT_ID_KAKAO}
+            client-secret: ${CLIENT_SECRET_KAKAO}
+            client-authentication-method: client_secret_post
+            scope: [profile_nickname, account_email, profile_image]
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+jwt:
+  secret-key: ${jwt-secret-key}
+  access-token-validity-in-sec: 1800 # 30분
+  refresh-token-validity-in-sec: 86400 # 3일
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+
+
+---
+#spring:
+#  profiles:
+#    include:
+#      - aws
+#    active: local
+#  servlet:
+#    multipart:
+#      enabled: true
+#      max-file-size: 20MB
+#      max-request-size: 30MB
+#  datasource:
+#    hikari:
+#      maximum-pool-size: 25
 # TODO: 이후 비동기 처리 때 추가
 #  task:
 #    execution:
@@ -20,51 +61,6 @@ spring:
 #        # 스레드 최대 개수
 #        max-size: 8
 
----
-spring:
-  config:
-    activate:
-      on-profile: localDev
-  datasource:
-    url: jdbc:mysql://localhost:3306/our_worldcup
-    username: root
-    password: root
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        show_sql: true
-        format_sql: true
-        # hinernate가 생성되는 sql 쿼리에 주석을 추가함.
-        use_sql_comments: true
-        hbm2ddl:
-          auto: update
-          default_batch_fetch_size: 1000
-
-
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
-  datasource:
-    url: jdbc:mysql://localhost:3306/our_worldcup
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
-    generate-ddl: true
-    defer-datasource-initialization: true
-
-  sql.init.mode: always
 
 #logging:
 #  level:
