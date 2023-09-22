@@ -28,7 +28,6 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final AuthProviderRepository authProviderRepository;
     private final UserAccountService userAccountService;
-    private final UserAccountRepository userAccountRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -56,12 +55,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private UserAccount saveOrUpdate(OAuthAttributes attributes) {
-        AuthProvider authProvider =  authProviderRepository.findByAuthProviderType(attributes.getAuthProviderType())
-                .orElseThrow(EntityNotFoundException::new);
-        UserAccount userAccount = userAccountRepository.findByEmailAndAuthProvider(attributes.getEmail(), authProvider)
-                .map(entity -> entity.update(attributes.getName()))
+        return userAccountService.findByEmailAndAuthProviderType(attributes.getEmail(), attributes.getAuthProviderType())
                 .orElseGet(() -> newUserAccount(attributes));
-        return userAccount;
     }
 
     private UserAccount newUserAccount(OAuthAttributes oAuthAttributes) {

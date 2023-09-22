@@ -20,6 +20,7 @@ public class OAuthAttributes {
     private String name;
     private String email;
     private String nickname;
+    private String picture;
     private AuthProviderType authProviderType;
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -32,6 +33,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) response.get("email"))
+                .picture((String) profile.get("profile_image_url"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .authProviderType(AuthProviderType.KAKAO)
@@ -45,6 +47,7 @@ public class OAuthAttributes {
                 .userName(name)
                 .nickName(userId)
                 .email(email)
+                .picture(picture)
                 .authProvider(authProviderRepository.findByAuthProviderType(this.authProviderType)
                         .orElseThrow(EntityNotFoundException::new))
                 .build();

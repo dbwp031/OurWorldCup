@@ -1,14 +1,9 @@
 package com.example.ourworldcup.controller.worldcup.dto;
 
-import com.example.ourworldcup.domain.Item;
-import com.example.ourworldcup.util.ItemUtil;
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class WorldcupResponseDto {

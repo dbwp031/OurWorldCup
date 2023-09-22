@@ -4,6 +4,7 @@ import com.example.ourworldcup.domain.auth.AuthProvider;
 import com.example.ourworldcup.domain.AuditingFields;
 import com.example.ourworldcup.domain.auth.Authority;
 import com.example.ourworldcup.domain.auth.Role;
+import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.RoleType;
 import com.example.ourworldcup.domain.relation.UserAccountRole;
 import jakarta.persistence.*;
@@ -26,6 +27,7 @@ public class UserAccount extends AuditingFields {
     @Column(nullable = false, length = 100) private String userName;
     @Column(length = 100) private String nickName;
     @Column(length = 100) private String email;
+    private String picture;
 
     @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
@@ -34,9 +36,15 @@ public class UserAccount extends AuditingFields {
     @ManyToOne(fetch = FetchType.EAGER)
     private AuthProvider authProvider;
 
+    private String refreshToken;
+
     public UserAccount update(String userName) {
         this.userName = userName;
         return this;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     @Override
@@ -44,7 +52,14 @@ public class UserAccount extends AuditingFields {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserAccount that = (UserAccount) o;
-        return email.equals(that.email) && authProvider == that.authProvider;
+        return Objects.equals(email, that.email) && Objects.equals(authProvider, that.authProvider);
+    }
+
+    public boolean equals(String email, AuthProviderType authProviderType) {
+        if (this.email.equals(email) && this.authProvider.getAuthProviderType().equals(authProviderType)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
