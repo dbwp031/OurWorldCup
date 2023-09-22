@@ -1,4 +1,4 @@
-package com.example.ourworldcup.util;
+package com.example.ourworldcup.util.component;
 
 import com.example.ourworldcup.domain.auth.AuthProvider;
 import com.example.ourworldcup.domain.auth.Authority;

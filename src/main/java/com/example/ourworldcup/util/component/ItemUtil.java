@@ -1,4 +1,4 @@
-package com.example.ourworldcup.util;
+package com.example.ourworldcup.util.component;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
