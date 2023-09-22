@@ -1,6 +1,8 @@
 package com.example.ourworldcup.config;
 
+import com.example.ourworldcup.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.ourworldcup.auth.service.CustomOAuth2UserService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class AuthConfig {
     private final InMemoryClientRegistrationRepository inMemoryClientRegistrationRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
+
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
+    private static CustomOAuth2UserService staticCustomOAuth2UserService;
+    private static OAuth2AuthorizationRequestBasedOnCookieRepository staticOAuth2AuthorizationRequestBasedOnCookieRepository;
+
+    @PostConstruct
+    public void init() {
+        staticCustomOAuth2UserService = this.customOAuth2UserService;
+        staticOAuth2AuthorizationRequestBasedOnCookieRepository = this.oAuth2AuthorizationRequestBasedOnCookieRepository;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
@@ -31,9 +43,11 @@ public class AuthConfig {
 
         http.oauth2Login(oauth -> oauth
                 .authorizationEndpoint((auth -> auth
-                        .baseUri("/oauth2/authorize")))
+                        .baseUri("/oauth2/authorize")
+                        .authorizationRequestRepository(staticOAuth2AuthorizationRequestBasedOnCookieRepository)))
                 .clientRegistrationRepository(inMemoryClientRegistrationRepository)
-                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)));
+                .userInfoEndpoint(userInfo -> userInfo.userService(staticCustomOAuth2UserService))
+                .defaultSuccessUrl("/login-success"));
 
         return http.build();
     }
