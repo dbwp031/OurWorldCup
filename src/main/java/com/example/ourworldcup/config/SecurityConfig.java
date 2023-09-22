@@ -43,4 +43,6 @@ public class SecurityConfig {
     JwtAuthFilter jwtAuthFilter() throws Exception {
         return new JwtAuthFilter(authenticationManager(authenticationConfiguration), new JWTFailureHandler() );
     }
+
+
 }

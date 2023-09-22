@@ -54,7 +54,7 @@ public class AuthConfig {
                 .defaultSuccessUrl("/login-success"));
 
         http.addFilterAt(staticSecurityConfig.jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 
