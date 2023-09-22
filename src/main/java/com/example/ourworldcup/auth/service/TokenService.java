@@ -29,7 +29,7 @@ public class TokenService {
         ACCESS,
         EXPIRED;
     }
-    private Key secretKey;
+    private final Key secretKey;
     private final Long tokenPeriod;
     private final Long refreshPeriod;
     private final UserAccountService userAccountService;

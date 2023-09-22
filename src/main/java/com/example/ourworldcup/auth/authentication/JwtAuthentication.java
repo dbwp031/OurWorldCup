@@ -27,7 +27,7 @@ public class JwtAuthentication implements Authentication {
     private Token token;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-    private Boolean isAuthenticated = false;
+    private Boolean isAuthenticated;
     private Object details;
 
     public void setDetails(Object authenticationDetails) {

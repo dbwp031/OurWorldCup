@@ -27,7 +27,7 @@ spring:
         enabled: true
 jwt:
   secret-key: ${jwt-secret-key}
-  access-token-validity-in-sec: 1800 # 30분
+  token-validity-in-sec: 1800 # 30분
   refresh-token-validity-in-sec: 86400 # 3일
 
 management:

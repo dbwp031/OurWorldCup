@@ -1,6 +1,9 @@
 package com.example.ourworldcup.config;
 
 import com.example.ourworldcup.auth.filter.JwtAuthFilter;
+import com.example.ourworldcup.auth.handler.OAuth2FailureHandler;
+import com.example.ourworldcup.auth.handler.OAuth2SuccessHandler;
+import com.example.ourworldcup.auth.provider.JwtProvider;
 import com.example.ourworldcup.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.ourworldcup.auth.service.CustomOAuth2UserService;
 import jakarta.annotation.PostConstruct;
@@ -20,15 +23,25 @@ public class AuthConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private final SecurityConfig securityConfig;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private final JwtProvider jwtProvider;
+
     private static CustomOAuth2UserService staticCustomOAuth2UserService;
     private static OAuth2AuthorizationRequestBasedOnCookieRepository staticOAuth2AuthorizationRequestBasedOnCookieRepository;
     private static SecurityConfig staticSecurityConfig;
+    private static OAuth2SuccessHandler staticOAuth2SuccessHandler;
+    private static OAuth2FailureHandler staticOAuth2FailureHandler;
+    private static JwtProvider staticJwtProvider;
 
     @PostConstruct
     public void init() {
         staticCustomOAuth2UserService = this.customOAuth2UserService;
         staticOAuth2AuthorizationRequestBasedOnCookieRepository = this.oAuth2AuthorizationRequestBasedOnCookieRepository;
         staticSecurityConfig = this.securityConfig;
+        staticOAuth2SuccessHandler = this.oAuth2SuccessHandler;
+        staticOAuth2FailureHandler = this.oAuth2FailureHandler;
+        staticJwtProvider = this.jwtProvider;
     }
 
     @Bean
@@ -51,9 +64,13 @@ public class AuthConfig {
                         .authorizationRequestRepository(staticOAuth2AuthorizationRequestBasedOnCookieRepository)))
                 .clientRegistrationRepository(inMemoryClientRegistrationRepository)
                 .userInfoEndpoint(userInfo -> userInfo.userService(staticCustomOAuth2UserService))
-                .defaultSuccessUrl("/login-success"));
+                .successHandler(staticOAuth2SuccessHandler)
+                .failureHandler(staticOAuth2FailureHandler)
+                );
 
         http.addFilterAt(staticSecurityConfig.jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(staticSecurityConfig.jwtExceptionInterceptorFilter(), JwtAuthFilter.class);
+        http.authenticationProvider(staticJwtProvider);
 
         return http.build();
     }

@@ -1,8 +1,15 @@
 package com.example.ourworldcup.config;
 
 import com.example.ourworldcup.auth.filter.JwtAuthFilter;
+import com.example.ourworldcup.auth.filter.JwtExceptionInterceptorFilter;
+import com.example.ourworldcup.auth.handler.CustomAuthenticationEntryPoint;
 import com.example.ourworldcup.auth.handler.JWTFailureHandler;
+import com.example.ourworldcup.auth.handler.OAuth2FailureHandler;
+import com.example.ourworldcup.auth.handler.OAuth2SuccessHandler;
 import com.example.ourworldcup.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.example.ourworldcup.auth.service.TokenService;
+import com.example.ourworldcup.config.properties.SecurityProperties;
+import com.example.ourworldcup.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -23,6 +30,9 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final TokenService tokenService;
+    private final UserAccountRepository userAccountRepository;
+    private final SecurityProperties securityProperties;
 
     @ConditionalOnMissingBean(ClientRegistrationRepository.class)
     InMemoryClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
@@ -44,5 +54,21 @@ public class SecurityConfig {
         return new JwtAuthFilter(authenticationManager(authenticationConfiguration), new JWTFailureHandler() );
     }
 
+    @Bean
+    CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+    @Bean
+    JwtExceptionInterceptorFilter jwtExceptionInterceptorFilter() {
+        return new JwtExceptionInterceptorFilter(customAuthenticationEntryPoint());
+    }
+    @Bean
+    OAuth2SuccessHandler oAuth2SuccessHandler() {
+        return new OAuth2SuccessHandler(tokenService, userAccountRepository, oAuth2AuthorizationRequestBasedOnCookieRepository(), securityProperties);
+    }
 
+    @Bean
+    OAuth2FailureHandler oAuth2FailureHandler() {
+        return new OAuth2FailureHandler(oAuth2AuthorizationRequestBasedOnCookieRepository(), securityProperties);
+    }
 }

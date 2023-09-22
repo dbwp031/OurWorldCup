@@ -18,7 +18,7 @@ public enum ErrorCode {
     JWT_DENIED(HttpStatus.UNAUTHORIZED, "토큰 해독 중 발생하였습니다."),
     INVALID_BASIC_AUTH(HttpStatus.UNAUTHORIZED, "잘못된 userId입니다."),
     JWT_SERVER_ERROR(HttpStatus.UNAUTHORIZED, "jwt 에러가 발생했습니다."),
-            ;
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에 이상이 생겼습니다." );
     
     private final HttpStatus httpStatus;
     private final String message;
