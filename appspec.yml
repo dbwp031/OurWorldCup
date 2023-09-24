@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/app/OurWorldcup
+    destination: /home/ec2-user/app/OurWorldCup
 
 hooks:
   AfterInstall:
