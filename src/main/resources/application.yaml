@@ -1,8 +1,6 @@
 spring:
   profiles:
-    include:
-      - aws
-      - dev
+    include: [aws, dev]
   security:
     oauth2:
       client:
