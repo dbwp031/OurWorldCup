@@ -1,13 +1,15 @@
 #! /bin/bash
 
 REPOSITORY=/home/ec2-user/app
-PROJECT_NAME=ourworldcup
+PROJECT_NAME=OurWorldCup
 
 cd $REPOSITORY/$PROJECT_NAME/
 
 echo "> Git Pull"
-
 git pull
+
+echo "> Git Checkout to develop branch"
+git checkout develop
 
 echo "> 프로젝트 Build 시작"
 sudo chmod -x gradlew
@@ -18,7 +20,7 @@ cd $REPOSITORY
 
 echo "> Build 파일 복사"
 
-cp $REPOSITORY/$PROJECT_NAME/build/libs/TheLastIsMe-0.0.1-SNAPSHOT.jar $REPOSITORY/
+cp $REPOSITORY/$PROJECT_NAME/build/libs/OurWorldCup-0.0.1-SNAPSHOT.jar $REPOSITORY/
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
 CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
