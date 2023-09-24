@@ -21,7 +21,7 @@ jobs:
         with:
           files: ./src/main/resources/application.yaml
         env:
-          spring.profiles.include: [aws, prod]
+          spring.profiles.include: "[aws, prod]"
           spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.CLIENT_ID_KAKAO }}
           spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.CLIENT_SECRET_KAKAO }}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY }}
