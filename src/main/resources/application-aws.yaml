@@ -1,8 +1,12 @@
+spring:
+  config:
+    activate:
+      on-profile: aws
 cloud:
   aws:
     s3:
       bucket: our-worldcup-s3-bucket
-      dev-bucket: our-worldcup-s3-bucket-dev
+#      dev-bucket: our-worldcup-s3-bucket-dev
     region:
       static: us-east-2
     credentials:
