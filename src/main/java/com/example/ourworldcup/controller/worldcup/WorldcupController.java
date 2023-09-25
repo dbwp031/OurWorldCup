@@ -36,12 +36,12 @@ public class    WorldcupController {
 
     @GetMapping("/new/worldcup-info")
     public String renderWorldcupInfoCreationForm() {
-        return "/worldcup/new/worldcup_info";
+        return "worldcup/new/worldcup_info";
     }
 
     @GetMapping("/new/add-item")
     public String renderWorldcupAddItemCreationForm() {
-        return "/worldcup/new/add_item";
+        return "worldcup/new/add_item";
     }
 
     @GetMapping("/new/items")
@@ -58,7 +58,7 @@ public class    WorldcupController {
         }).collect(Collectors.toList());
         worldcupItemsDto.setItems(itemsDto);
         map.addAttribute("worldcupItemsDto", worldcupItemsDto);
-        return "/worldcup/new/items";
+        return "worldcup/new/items";
     }
     //
     @GetMapping("/new/invite")
@@ -66,7 +66,7 @@ public class    WorldcupController {
         // TODO: 로그인 기능을 추가해서 유저 아이디를 받을 수 있도록 해야 한다. (임시 처리)
         httpSession.setAttribute("userId", "testUserId");
 
-        return "/worldcup/new/invite";
+        return "worldcup/new/invite";
     }
 
 //    @GetMapping("/new/invite")
