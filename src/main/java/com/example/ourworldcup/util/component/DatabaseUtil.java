@@ -47,7 +47,7 @@ public class DatabaseUtil {
                         .build();
                 roleRepository.save(role);
             }
-        } else if (authorityNum != RoleType.values().length) {
+        } else if (roleNum != RoleType.values().length) {
             throw new RuntimeException("Role DB row 수가 비정상입니다.");
         }
 
