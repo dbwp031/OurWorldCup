@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 
 import static com.example.ourworldcup.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.IS_LOCAL;
 
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -65,7 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .map(Cookie::getValue)
                 .map(Boolean::parseBoolean)
                 .orElse(false);
-
+        log.info("ISLOCAL: {}", isLocal);
         // authenticationResult 받기 <- 여기에 들어온다는 것 자체가 인증 성공했단 뜻임.
         JwtAuthentication jwtAuthenticationResult = (JwtAuthentication) authenticationResult;
 
@@ -86,6 +87,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .filter(c -> c.getName().equals(cookieName))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseGet(null);
+                .orElse(null);
     }
 }
