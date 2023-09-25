@@ -24,6 +24,7 @@ jobs:
           spring.profiles.include: prod
           spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.CLIENT_ID_KAKAO }}
           spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.CLIENT_SECRET_KAKAO }}
+          spring.security.oauth2.client.registration.kakao.redirect-uri: ${{ env.REDIRECT_URI_KAKAO }}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY }}
           cloud.aws.credentials.access-key: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
