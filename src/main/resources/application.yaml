@@ -1,8 +1,6 @@
 spring:
   profiles:
-    include:
-      - aws
-      - dev
+    include: dev
   security:
     oauth2:
       client:
@@ -26,7 +24,7 @@ spring:
       filter:
         enabled: true
 jwt:
-  secret-key: ${jwt-secret-key}
+  secret-key: ${JWT_SECRET_KEY}
   token-validity-in-sec: 1800 # 30분
   refresh-token-validity-in-sec: 86400 # 3일
 
@@ -36,32 +34,13 @@ management:
       exposure:
         include: health
 
-
-
----
-#spring:
-#  profiles:
-#    include:
-#      - aws
-#    active: local
-#  servlet:
-#    multipart:
-#      enabled: true
-#      max-file-size: 20MB
-#      max-request-size: 30MB
-#  datasource:
-#    hikari:
-#      maximum-pool-size: 25
-# TODO: 이후 비동기 처리 때 추가
-#  task:
-#    execution:
-#      pool:
-#        # CORE 스레드 수
-#        core-size: 8
-#        # 스레드 최대 개수
-#        max-size: 8
-
-
-#logging:
-#  level:
-#    root: debug
+cloud:
+  aws:
+    s3:
+      bucket: our-worldcup-s3-bucket
+    #      dev-bucket: our-worldcup-s3-bucket-dev
+    region:
+      static: us-east-2
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY_ID}
+      secret-key: ${AWS_S3_SECRET_ACCESS_KEY}
