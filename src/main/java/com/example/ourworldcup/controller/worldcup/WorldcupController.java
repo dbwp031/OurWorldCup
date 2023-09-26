@@ -64,9 +64,9 @@ public class    WorldcupController {
     }
     //
     @GetMapping("/new/invite")
-    public String worldcupInvite(HttpSession httpSession) {
-        // TODO: 로그인 기능을 추가해서 유저 아이디를 받을 수 있도록 해야 한다. (임시 처리)
-        httpSession.setAttribute("userId", "testUserId");
+    public String worldcupInvite(ModelMap modelMap, Authentication authentication) {
+        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+        modelMap.addAttribute("userId", jwtAuthentication.getPrincipalDetails().getUserId());
 
         return "worldcup/new/invite";
     }
@@ -101,6 +101,12 @@ public class    WorldcupController {
         itemService.saveItem(itemCreateRequestDto,
                 (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP));
         return "redirect:/worldcup/new/add-item";
+    }
+
+    @GetMapping("/{worldcupId}/details")
+    public String renderWorldcupDetails(@PathVariable Long worldcupId,
+                                        ModelMap modelMap) {
+        return "worldcup/details/main";
     }
 
 }
