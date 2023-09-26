@@ -6,6 +6,7 @@ import com.example.ourworldcup.domain.auth.Authority;
 import com.example.ourworldcup.domain.auth.Role;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.RoleType;
+import com.example.ourworldcup.domain.relation.Member;
 import com.example.ourworldcup.domain.relation.UserAccountRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,11 @@ public class UserAccount{
     @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<UserAccountRole> userAccountRoles = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<Member> members = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private AuthProvider authProvider;
