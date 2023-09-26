@@ -21,7 +21,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
-public class UserAccount extends AuditingFields {
+public class UserAccount{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(nullable = false, length = 100) private String userId;
     @Column(nullable = false, length = 100) private String userName;

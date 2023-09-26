@@ -66,7 +66,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .map(Cookie::getValue)
                 .map(Boolean::parseBoolean)
                 .orElse(false);
-        log.info("ISLOCAL: {}", isLocal);
         // authenticationResult 받기 <- 여기에 들어온다는 것 자체가 인증 성공했단 뜻임.
         JwtAuthentication jwtAuthenticationResult = (JwtAuthentication) authenticationResult;
 

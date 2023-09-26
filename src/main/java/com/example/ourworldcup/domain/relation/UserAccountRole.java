@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
-public class UserAccountRole extends AuditingFields {
+public class UserAccountRole {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
