@@ -6,6 +6,7 @@ import com.example.ourworldcup.domain.Item;
 import com.example.ourworldcup.domain.ItemImage;
 import com.example.ourworldcup.domain.Uuid;
 import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.service.worldcup.WorldcupServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Optional;
 
@@ -40,8 +42,15 @@ class WorldcupServiceImplTest {
                 .title(title)
                 .content(content)
                 .password(password).build();
+
+        UserAccount userAccount = UserAccount.builder()
+                .userId("userId")
+                .userName("name")
+                .email("email")
+                .nickName("nickname")
+                .build();
         // When
-        Worldcup worldcup = sut.createWorldcup(worldcupCreateRequestDto);
+        Worldcup worldcup = sut.createWorldcup(worldcupCreateRequestDto, userAccount);
         // Then
         assertThat(worldcup).hasFieldOrPropertyWithValue("title", title)
                 .hasFieldOrPropertyWithValue("content", content)

@@ -3,8 +3,6 @@ package com.example.ourworldcup.auth.service;
 import com.example.ourworldcup.auth.dto.Token;
 import com.example.ourworldcup.auth.dto.UidDto;
 import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
-import com.example.ourworldcup.domain.Member;
-import com.example.ourworldcup.domain.auth.Role;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.RoleType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
