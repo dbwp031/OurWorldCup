@@ -1,5 +1,7 @@
-package com.example.ourworldcup.domain;
+package com.example.ourworldcup.domain.relation;
 
+import com.example.ourworldcup.domain.AuditingFields;
+import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.MemberRole;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 import jakarta.persistence.*;
@@ -13,11 +15,11 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
-public class Member extends AuditingFields{
+public class Member extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @ManyToOne(optional = false) @JoinColumn(name="user_account_id") private UserAccount userAccount;
     @ManyToOne(optional = false) @JoinColumn(name="worldcup_id") private Worldcup worldcup;
-    @Column(nullable = false) MemberRole memberRole;
+    @Column(nullable = false) @Enumerated(EnumType.STRING) MemberRole memberRole;
 
     @Override
     public boolean equals(Object o) {

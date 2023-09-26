@@ -1,5 +1,6 @@
 package com.example.ourworldcup.controller.worldcup;
 
+import com.example.ourworldcup.auth.authentication.JwtAuthentication;
 import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
@@ -10,6 +11,7 @@ import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.service.item.ItemService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -78,8 +80,10 @@ public class    WorldcupController {
     @PostMapping("/new/worldcup-info")
     public String saveWorldcupInfo_redirectWorldcupAddItemCreationForm(
             @ModelAttribute WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto,
+            Authentication authentication,
             HttpSession httpSession) {
-        Worldcup worldcup = worldcupService.createWorldcup(worldcupCreateRequestDto);
+        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+        Worldcup worldcup = worldcupService.createWorldcup(worldcupCreateRequestDto, jwtAuthentication.getPrincipalDetails());
         httpSession.setAttribute(SESSION_ATTR_WORLDCUP, worldcup);
         return "redirect:/worldcup/new/add-item";
     }

@@ -66,7 +66,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getDetails() {
-        return null;
+        return this.principalDetails;
     }
 
     @Override
