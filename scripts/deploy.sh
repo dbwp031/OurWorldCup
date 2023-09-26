@@ -23,7 +23,8 @@ echo "> Build 파일 복사"
 cp $REPOSITORY/$PROJECT_NAME/build/libs/OurWorldCup-0.0.1-SNAPSHOT.jar $REPOSITORY/
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
-CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
+#CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
+CURRENT_PID=$(pgrep -f OurWorldCup-0.0.1-SNAPSHOT.jar)
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
 
