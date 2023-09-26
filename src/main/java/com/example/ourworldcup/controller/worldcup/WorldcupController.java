@@ -103,4 +103,10 @@ public class    WorldcupController {
         return "redirect:/worldcup/new/add-item";
     }
 
+    @GetMapping("/{worldcupId}/details")
+    public String renderWorldcupDetails(@PathVariable Long worldcupId,
+                                        ModelMap modelMap) {
+        return "worldcup/details/main";
+    }
+
 }

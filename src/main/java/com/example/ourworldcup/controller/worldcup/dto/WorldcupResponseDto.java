@@ -7,6 +7,21 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class WorldcupResponseDto {
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BasicDto {
+        private Long id;
+        private String title;
+        private String content;
+        private String invitationCode;
+        private String password;
+    }
+
     @Builder
     @Getter
     @Setter
