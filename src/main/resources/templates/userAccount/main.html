@@ -39,18 +39,53 @@
 <body>
 <header th:replace="header :: header"></header>
 <main id="main">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+        <div class="container" data-aos="fade-up">
 
+            <div class="section-title">
+                <h2 th:text="'안녕하세요 ' + ${userAccountDto.getUserName()} + '님!'"></h2>
+                <p>내 계정</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <img th:src="${userAccountDto.getPicture()}" class="img-fluid" alt="">
+                </div>
+                <div class="col-lg-8 pt-4 pt-lg-0 content">
+                    <h3 th:text="${userAccountDto.getNickName()}"></h3>
+                    <p class="fst-italic">
+                        나중에 참여한 월드컵을 해시태그 느낌으로 붙여놔도 좋을 듯
+                    </p>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><i class="bi bi-rounded-right"></i> <strong>이름:</strong> <span th:text="${userAccountDto.getUserName()}"></span></li>
+                                <li><i class="bi bi-rounded-right"></i> <strong>닉네임:</strong> <span th:text="${userAccountDto.getNickName()}"></span></li>
+                                <li><i class="bi bi-rounded-right"></i> <strong>Email:</strong> <span th:text="${userAccountDto.getEmail()}"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p>
+                        Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci omnis et ut. Nulla accusantium dolor incidunt officia tempore. Et eius omnis.
+                        Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque neque. Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni laudantium dolores.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section><!-- End About Section -->
     <!-- ======= Services Section ======= -->
     <section id="services" class="services">
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
-                <h2>월드컵</h2>
+                <h2>참여한 월드컵</h2>
                 <p>참여한 월드컵들을 확인하세요</p>
             </div>
 
             <div class="row">
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                <div th:each="worldcup: ${userAccountDto.getWorldcups()}"  class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                     <div class="icon-box iconbox-blue">
                         <div class="icon">
                             <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -59,8 +94,8 @@
                             <i class="bx bxl-dribbble"></i>
                         </div>
 <!--                        <h4><a th:href=@"/worldcup/${worldcupId}/details">여자 아이돌 이상형 월드컵</a></h4>-->
-                        <h4><a th:href="@{/worldcup/0/details}">여자 아이돌 이상형 월드컵</a></h4>
-                        <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                        <h4><a th:href="@{/worldcup/{id}/details(id=${worldcup.id})}" th:text="${worldcup.getTitle()}">여자 아이돌 이상형 월드컵</a></h4>
+                        <p th:text="${worldcup.getContent()}"></p>
                     </div>
                 </div>
 
@@ -69,7 +104,22 @@
 
         </div>
     </section><!-- End Services Section -->
+    <!-- ======= Services Section ======= -->
+    <section id="create" class="services">
+        <div class="container" data-aos="fade-up">
 
+            <div class="section-title">
+                <h2>월드컵 생성하기</h2>
+                <p>새로운 월드컵을 생성해보세요!</p>
+            </div>
+            <div class="text-center">
+                <a class="bi" href="/worldcup/new" >월드컵 생성하기</a>
+            </div>
+        </div>
+        </div>
+
+        </div>
+    </section><!-- End Services Section -->
 </main><!-- End #main -->
 
 <footer th:replace="footer :: footer"></footer>
