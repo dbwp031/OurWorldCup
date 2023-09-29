@@ -1,11 +1,3 @@
-// Gradle 빌드 스크립트 자체의 클래스 패스를 구성하기 위해 사용된다.
-buildscript {
-    // Gradle에서 사용하는 확장 속성
-    // 기본적으로 사용자 정의 속성을 추가하거나 기존 속성을 수정
-    ext {
-        queryDslVersion = "5.0.0"
-    }
-}
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.3'
@@ -34,59 +26,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2'
-    testCompileOnly 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
-
-    // QueryDSL
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    implementation "com.querydsl:querydsl-core"
-    implementation "com.querydsl:querydsl-collections"
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
-
-    // Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.security:spring-security-oauth2-client:6.1.3'
-
-    //JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-//Querydsl 설정부
-def generated  = 'src/main/generated' // intellij에서 발생할 수 있는 덮어쓰기 오류를 해결하기 위해 추가한 설정
-
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
-    options.getGeneratedSourceOutputDirectory().set(file(generated))
-}
-
-// java source set에 querydsl QClass 위치 추가
-sourceSets {
-    main.java.srcDirs += [ generated ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제
-clean{
-    delete file(generated)
 }
