@@ -55,7 +55,7 @@
             <h4>친구 초대 링크</h4>
            <p> <small><em>링크를 친구에게 전달하여 월드컵에 초대하세요!</em></small></p>
            <div class="input-group mb-3 box01">
-             <input type="text"  class="form-control" value="https://WorldcupInviteSample" readonly>
+             <input type="text"  class="form-control" th:value="${worldcupDto.getInvitationCode()}" readonly>
              <span class="input-group-text">
             <button onclick="copy_to_clipboard(event)">
              <img src="https://blog.kakaocdn.net/dn/N1wUc/btqIl7XZtKM/b44qX9Six1vczz2ISWj4LK/img.png" alt="복사하기">
@@ -67,7 +67,7 @@
              <h4>월드컵 비밀번호</h4>
              <p> <small><em>1단계에서 생성한 월드컵 비밀번호 입력을 통해 월드컵에 참여가 가능합니다.</em></small></p>
              <div class="input-group mb-3 password-open">
-               <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" value="worldcupPasswordSample" readonly id="pwOpenCloseTarget">
+               <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" th:value="${worldcupDto.getPassword()}" readonly id="pwOpenCloseTarget">
                <span class="input-group-text">
                <i class="fa-solid fa-eye"></i>
                </span>

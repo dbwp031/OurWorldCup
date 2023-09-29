@@ -6,7 +6,9 @@ import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.converter.item.ItemConverter;
+import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.service.item.ItemService;
 import jakarta.servlet.http.HttpSession;
@@ -17,12 +19,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/worldcup")
 @Controller
-public class    WorldcupController {
+public class WorldcupController {
     private static final String SESSION_ATTR_WORLDCUP = "worldcup";
     private static final String SESSION_ATTR_ITEMS = "items";
 
@@ -30,6 +33,7 @@ public class    WorldcupController {
     private final WorldcupService worldcupService;
     private final ItemConverter itemConverter;
     private final FileService fileService;
+    private final WorldcupRepository worldcupRepository;
     // worldcup 생성 페이지 - GetMapping
     @GetMapping("/new")
     public String worldcupAdd() {
@@ -64,10 +68,12 @@ public class    WorldcupController {
     }
     //
     @GetMapping("/new/invite")
-    public String worldcupInvite(ModelMap modelMap, Authentication authentication) {
+    public String worldcupInvite(ModelMap modelMap, Authentication authentication, HttpSession httpSession) {
         JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+        Worldcup worldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
+        WorldcupResponseDto.BasicDto worldcupResponseBasicDto = WorldcupConverter.toWorldcupResponseBasicDto(worldcup);
         modelMap.addAttribute("userId", jwtAuthentication.getPrincipalDetails().getUserId());
-
+        modelMap.addAttribute("worldcupDto", worldcupResponseBasicDto);
         return "worldcup/new/invite";
     }
 
@@ -106,7 +112,21 @@ public class    WorldcupController {
     @GetMapping("/{worldcupId}/details")
     public String renderWorldcupDetails(@PathVariable Long worldcupId,
                                         ModelMap modelMap) {
-        return "worldcup/details/main";
+        Worldcup worldcup = worldcupService.findById(worldcupId).get();
+        WorldcupResponseDto.BasicDto worldcupResponseBaseDto = WorldcupConverter.toWorldcupResponseBasicDto(worldcup);
+        modelMap.addAttribute("worldcupDto", worldcupResponseBaseDto);
+        return "worldcup/detail";
     }
 
+    @GetMapping("/{worldcupId}/members")
+    public String renderWorldcupMembers(@PathVariable Long worldcupId,
+                                        ModelMap modelMap) {
+        Optional<Worldcup> worldcup = worldcupService.findById(worldcupId);
+        if (worldcup.isPresent()) {
+            WorldcupResponseDto.MembersDto worldcupResponseMembersDto = WorldcupConverter.toWorldcupResponseMembersDto(worldcup.get());
+            modelMap.addAttribute("worldcupDto", worldcupResponseMembersDto);
+            return "worldcup/members";
+        }
+        return "error";
+    }
 }

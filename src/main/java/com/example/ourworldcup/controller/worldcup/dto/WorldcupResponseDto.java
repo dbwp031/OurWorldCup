@@ -1,5 +1,6 @@
 package com.example.ourworldcup.controller.worldcup.dto;
 
+import com.example.ourworldcup.domain.relation.Member;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -21,8 +22,21 @@ public class WorldcupResponseDto {
         private String invitationCode;
         private String password;
     }
-
     @Builder
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MembersDto {
+        private Long id;
+        private String title;
+        private String content;
+        private List<MemberResponseDto.BasicDto> members;
+    }
+
+
+        @Builder
     @Getter
     @Setter
     @ToString
@@ -32,6 +46,17 @@ public class WorldcupResponseDto {
         private Long id;
         private String title;
         private String base64Image;
+    }
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitationDto {
+        private Long id;
+        private String title;
+        private String content;
     }
     @Builder
     @Setter
