@@ -42,7 +42,7 @@ class JpaConfigTest {
         Worldcup worldcup = Worldcup.builder()
                 .title("test")
                 .password("test")
-                .invitationCode("test")
+//                .invitationCode("test")
                 .build();
         Worldcup savedWorldcup = entityManager.persistAndFlush(worldcup);
 

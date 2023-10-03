@@ -10,8 +10,12 @@ import lombok.*;
 @ToString(callSuper = true)
 @Entity
 public class Item extends AuditingFields{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "worldcup_id") private Worldcup worldcup;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Worldcup worldcup;
 
     @ToString.Exclude
     @Setter @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

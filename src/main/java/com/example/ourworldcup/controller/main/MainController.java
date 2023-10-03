@@ -16,7 +16,7 @@ public class MainController {
     @GetMapping("/")
     public String home(Authentication authentication) {
         JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
-        if (jwtAuthentication.isAuthenticated()) {
+        if (jwtAuthentication!=null && jwtAuthentication.isAuthenticated()) {
             return "redirect:/@" + jwtAuthentication.getPrincipalDetails().getUserId();
         }
         return "main/home";

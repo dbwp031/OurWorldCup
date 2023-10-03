@@ -2,9 +2,6 @@ package com.example.ourworldcup.service.worldcup.impl;
 
 import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
-import com.example.ourworldcup.domain.Item;
-import com.example.ourworldcup.domain.ItemImage;
-import com.example.ourworldcup.domain.Uuid;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.repository.WorldcupRepository;
@@ -15,12 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.test.context.support.WithMockUser;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
 
 @DisplayName("비즈니스 로직 - Worldcup")
 @ExtendWith(MockitoExtension.class)

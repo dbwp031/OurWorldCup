@@ -3,8 +3,6 @@ package com.example.ourworldcup.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @ToString(callSuper = true)
 @Getter
 @Builder
@@ -15,6 +13,7 @@ public class Invitation extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ToString.Exclude
     @OneToOne
     private Worldcup worldcup;
 

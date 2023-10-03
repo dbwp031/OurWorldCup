@@ -1,12 +1,11 @@
 package com.example.ourworldcup.service.item.impl;
 
-import com.example.ourworldcup.aws.s3.FileService;
 import com.example.ourworldcup.aws.s3.metadata.ItemImagePackageMetadata;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.domain.Item;
-import com.example.ourworldcup.domain.ItemImage;
 import com.example.ourworldcup.domain.Uuid;
 import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.repository.item.ItemRepository;
 import com.example.ourworldcup.repository.uuid.UuidRepository;
 import com.example.ourworldcup.service.fileProcess.ItemImageProcess;
@@ -25,23 +24,25 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UuidRepository uuidRepository;
+    private final WorldcupRepository worldcupRepository;
     private final ItemImageProcess  itemImageProcess;
 
     @Override
     @Transactional
     public Item saveItem(ItemRequestDto.ItemCreateRequestDto itemCreateRequestDto, Worldcup worldcup) {
+        Worldcup realWorldcup = worldcupRepository.getReferenceById(worldcup.getId());
         String itemTitle = itemCreateRequestDto.getTitle();
-        Boolean isExist = itemRepository.checkExistByItemTitleInSameWorldcup(worldcup.getId(), itemTitle);
+        Boolean isExist = itemRepository.checkExistByItemTitleInSameWorldcup(realWorldcup.getId(), itemTitle);
         if (isExist) {
             throw new IllegalStateException(String.format("이미 같은 이름의 아이템이 월드컵에 추가되어 있습니다. (TITLE: %s)", itemTitle));
         } else {
             Item item = Item.builder()
-                    .worldcup(worldcup)
+                    .worldcup(realWorldcup)
                     .title(itemTitle)
                     .build();
-            System.out.println("아이템 추가 전: "+ worldcup.getItems().toString());
-            worldcup.addItem(item);
-            System.out.println("아이템 추가 후: "+ worldcup.getItems().toString());
+            System.out.println("아이템 추가 전: "+ realWorldcup.getItems().toString());
+            realWorldcup.addItem(item);
+            System.out.println("아이템 추가 후: "+ realWorldcup.getItems().toString());
 
             String uuid = UUID.randomUUID().toString();
             Uuid uuidEntity = Uuid.builder()
@@ -53,9 +54,9 @@ public class ItemServiceImpl implements ItemService {
                     .uuidEntity(uuidEntity).build();
 
             item = itemImageProcess.uploadImageAndMapToItem(itemCreateRequestDto.getImage(), itemImagePackageMetadata, item);
-
             uuidRepository.save(uuidEntity);
             itemRepository.save(item);
+//            worldcupRepository.save(worldcup);
             return item;
         }
     }
@@ -63,7 +64,15 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteItem(Long id) {
+        Item item = this.findById(id);
+        item.getWorldcup().getItems().remove(item);
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    public Item findById(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 item id입니다."));
     }
 
 

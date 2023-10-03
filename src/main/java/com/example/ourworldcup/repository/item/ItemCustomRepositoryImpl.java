@@ -2,7 +2,6 @@ package com.example.ourworldcup.repository.item;
 
 import com.example.ourworldcup.domain.QItem;
 import com.example.ourworldcup.domain.QWorldcup;
-import com.example.ourworldcup.domain.Worldcup;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
 package com.example.ourworldcup.controller.worldcup.dto;
 
+import com.example.ourworldcup.controller.game.dto.GameResponseDto;
 import com.example.ourworldcup.domain.relation.Member;
 import lombok.*;
 
@@ -34,7 +35,18 @@ public class WorldcupResponseDto {
         private String content;
         private List<MemberResponseDto.BasicDto> members;
     }
-
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GamesDto {
+        private Long id;
+        private String title;
+        private String content;
+        private List<GameResponseDto.ResultDto> games;
+    }
 
         @Builder
     @Getter

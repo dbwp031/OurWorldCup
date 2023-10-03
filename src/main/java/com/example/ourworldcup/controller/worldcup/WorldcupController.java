@@ -2,13 +2,19 @@ package com.example.ourworldcup.controller.worldcup;
 
 import com.example.ourworldcup.auth.authentication.JwtAuthentication;
 import com.example.ourworldcup.aws.s3.FileService;
+import com.example.ourworldcup.controller.game.dto.GameResponseDto;
 import com.example.ourworldcup.controller.item.dto.ItemRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
+import com.example.ourworldcup.converter.game.GameConverter;
 import com.example.ourworldcup.converter.item.ItemConverter;
 import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.domain.constant.PickType;
+import com.example.ourworldcup.domain.game.Game;
+import com.example.ourworldcup.dto.VsResultDto;
 import com.example.ourworldcup.repository.WorldcupRepository;
+import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.service.item.ItemService;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,6 +41,8 @@ public class WorldcupController {
     private final ItemConverter itemConverter;
     private final FileService fileService;
     private final WorldcupRepository worldcupRepository;
+    private final GameService gameService;
+
     // worldcup 생성 페이지 - GetMapping
     @GetMapping("/new")
     public String worldcupAdd() {
@@ -52,12 +61,13 @@ public class WorldcupController {
 
     @GetMapping("/new/items")
     public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) throws Exception {
-
-        Worldcup worldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
+        Worldcup sessionWorldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
+        Worldcup worldcup = worldcupService.findById(sessionWorldcup.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 월드컵이 존재하지 않습니다"));
         WorldcupResponseDto.WorldcupItemsDto worldcupItemsDto = new WorldcupResponseDto.WorldcupItemsDto();
         List<WorldcupResponseDto.WorldcupItemDto> itemsDto = worldcup.getItems().stream().map(a -> {
             try {
-                return itemConverter.toWorldcupItemDto(a, fileService);
+                return itemConverter.toWorldcupItemDto(a);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -66,6 +76,7 @@ public class WorldcupController {
         map.addAttribute("worldcupItemsDto", worldcupItemsDto);
         return "worldcup/new/items";
     }
+
     //
     @GetMapping("/new/invite")
     public String worldcupInvite(ModelMap modelMap, Authentication authentication, HttpSession httpSession) {
@@ -128,5 +139,68 @@ public class WorldcupController {
             return "worldcup/members";
         }
         return "error";
+    }
+
+    @GetMapping("/{worldcupId}/game/new")
+    public String renderGameSettingPage(@PathVariable Long worldcupId,
+                                        ModelMap modelMap) {
+        List<Integer> roundTypes = worldcupService.getRoundTypes(worldcupId);
+        String worldcupTitle = worldcupService.getTitle(worldcupId);
+        modelMap.addAttribute("worldcupId", worldcupId);
+        modelMap.addAttribute("worldcupTitle", worldcupTitle);
+        modelMap.addAttribute("roundTypes", roundTypes);
+        return "game/setting";
+    }
+
+    @GetMapping("/{worldcupId}/game/new/round/{round}")
+    public String createGame(@PathVariable Long worldcupId,
+                             @PathVariable(value = "round") Long initialRound,
+                             Authentication authentication) {
+        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+        Game game = gameService.createGame(jwtAuthentication.getPrincipalDetails().getId(), worldcupId, initialRound, PickType.ORDER);
+        return String.format("redirect:/game/%d", game.getId());
+    }
+
+    @GetMapping("/{worldcupId}/games")
+    public String renderGamesPage(@PathVariable Long worldcupId,
+                                  ModelMap modelMap) {
+        WorldcupResponseDto.GamesDto gamesDto = WorldcupConverter.toWorldcupResponseGamesDto(worldcupService.findById(worldcupId).orElseThrow(() -> new IllegalArgumentException("해당 월드컵 id가 존재하지 않습니다")));
+        modelMap.addAttribute("gamesDto", gamesDto);
+        return "worldcup/games";
+    }
+
+    @GetMapping("/{worldcupId}/game/{gameId}/details")
+    public String renderGameDetailPage(@PathVariable Long worldcupId,
+                                       @PathVariable Long gameId,
+                                       ModelMap modelMap) {
+        GameResponseDto.ResultDto gameDto = GameConverter.toGameResponseResultDto(gameService.findById(gameId));
+        modelMap.addAttribute("gameDto", gameDto);
+        return "game/detail";
+    }
+
+    @GetMapping("/{worldcupId}/games/vs")
+    public String renderGameVsPage(@PathVariable Long worldcupId,
+                                   ModelMap modelMap,
+                                   Authentication authentication) {
+        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+        List<Game> games = gameService.findGamesByUserAccountId(jwtAuthentication.getPrincipalDetails().getId());
+        if (games.size() == 0) {
+            return "redirect:/";
+        } else if (games.size() == 1) {
+            return "redirect:/worldcup/" + worldcupId + "/games/vs/" + games.get(0).getId();
+        }
+        List<GameResponseDto.ResultDto> gamesDto = games.stream().map(GameConverter::toGameResponseResultDto).toList();
+        modelMap.addAttribute("gamesDto", gamesDto);
+        return "game/vs/enterGate";
+    }
+
+    @GetMapping("/{worldcupId}/games/vs/{gameId}")
+    public String renderVsPage(@PathVariable Long worldcupId,
+                               @PathVariable Long gameId,
+                               ModelMap modelMap) {
+        List<VsResultDto> vsResultDtos = gameService.getVsResults(gameId);
+        modelMap.addAttribute("vsResultDtos", vsResultDtos);
+        modelMap.addAttribute("worldcupId", worldcupId);
+        return "game/vs/vs";
     }
 }

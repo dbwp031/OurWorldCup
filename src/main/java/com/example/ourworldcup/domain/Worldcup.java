@@ -13,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Entity
-public class Worldcup extends AuditingFields{
+public class Worldcup extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(nullable = false, length = 100) private String password;
     @Column(nullable = false, length=100) private String title;
@@ -22,7 +22,6 @@ public class Worldcup extends AuditingFields{
     @OneToOne(mappedBy ="worldcup", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Invitation invitation;
 
-    @ToString.Exclude
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
     private List<Item> items = new ArrayList<>();
