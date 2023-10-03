@@ -55,10 +55,9 @@ public class AuthConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/oauth2/**", "/assets/**", "/css/**", "/forms/**", "/js/**", "/icons/**",
-                        "/api/**", "/**/*.ico",
+                        "/api/**","/favicon.ico",
                         "/", "/health").permitAll()
                 .anyRequest().authenticated());
-
         http.oauth2Login(oauth -> oauth
                 .authorizationEndpoint((auth -> auth
                         .baseUri("/oauth2/authorize")
