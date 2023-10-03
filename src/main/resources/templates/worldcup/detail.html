@@ -69,6 +69,9 @@
                     <div class="row text-center">
                         <a th:href="@{/worldcup/{worldcupId}/games(worldcupId=${worldcupDto.getId()})}">게임 결과들 보기</a>
                     </div>
+                    <div class="row text-center">
+                        <a th:href="@{/worldcup/{worldcupId}/game/new(worldcupId=${worldcupDto.getId()})}">새 게임 하기</a>
+                    </div>
                     <div class="row">
                         <p th:text="${worldcupDto.getContent()}"></p>
                     </div>
