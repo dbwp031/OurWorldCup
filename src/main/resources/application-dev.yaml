@@ -6,14 +6,15 @@ spring:
     url: jdbc:mysql://localhost:3306/our_worldcup
     username: root
     password: root
-  sql.init.mode: always
+#  sql:
+#    init:
+#      mode: always
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         database-platform: org.hibernate.dialect.MySQL8Dialect
-        generate-ddl: true
         show_sql: true
         defer-datasource-initialization: true
         format_sql: true
@@ -25,3 +26,11 @@ login:
   default-host: 'localhost'
   default-failure-path: '/login'
   default-success-path: '/'
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

@@ -1,5 +1,6 @@
 package com.example.ourworldcup.service.member.impl;
 
+import com.example.ourworldcup.domain.relation.Member;
 import com.example.ourworldcup.repository.MemberRepository;
 import com.example.ourworldcup.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMemberById(Long id) {
         memberRepository.deleteByIdDirectly(id);
+    }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 member id 입니다"));
     }
 }

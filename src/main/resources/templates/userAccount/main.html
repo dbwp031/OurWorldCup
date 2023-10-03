@@ -95,7 +95,7 @@
                         </div>
 <!--                        <h4><a th:href=@"/worldcup/${worldcupId}/details">여자 아이돌 이상형 월드컵</a></h4>-->
                         <h4><a th:href="@{/worldcup/{id}/details(id=${worldcup.id})}" th:text="${worldcup.getTitle()}">여자 아이돌 이상형 월드컵</a></h4>
-                        <p th:text="${worldcup.getContent()}"></p>
+                        <a th:href="@{worldcup/{id}/game/new(id=${worldcup.id})}">게임 시작하기</a>
                     </div>
                 </div>
 

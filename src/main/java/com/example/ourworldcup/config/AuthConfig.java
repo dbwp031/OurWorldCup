@@ -55,6 +55,7 @@ public class AuthConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/oauth2/**", "/assets/**", "/css/**", "/forms/**", "/js/**","/icons/**",
+                        "/api/**",
                         "/","/health").permitAll()
                 .anyRequest().authenticated());
 

@@ -15,9 +15,11 @@ import lombok.*;
 public class UserAccountRole {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Role role;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private UserAccount userAccount;
 }

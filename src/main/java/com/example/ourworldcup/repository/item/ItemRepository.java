@@ -1,10 +1,12 @@
 package com.example.ourworldcup.repository.item;
 
 import com.example.ourworldcup.domain.Item;
+import com.example.ourworldcup.domain.game.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ItemRepository extends
@@ -14,4 +16,5 @@ public interface ItemRepository extends
     Optional<Item> findItemByWorldcupId(@Param("worldcupId") Long worldcupId);
 
     void deleteById(Long id);
+
 }

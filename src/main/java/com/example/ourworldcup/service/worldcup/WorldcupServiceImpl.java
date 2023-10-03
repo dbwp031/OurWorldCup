@@ -9,10 +9,14 @@ import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.repository.MemberRepository;
 import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.service.invitation.InvitationService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,6 +32,11 @@ public class WorldcupServiceImpl implements WorldcupService{
     private final WorldcupRepository worldcupRepository;
     private final MemberRepository memberRepository;
     private final InvitationService invitationService;
+
+    @PersistenceContext
+    EntityManager em;
+    private final static Integer MINIMUM_ROUND_TYPE = 4;
+    private final static Integer MAXIMUM_ROUND_TYPE = 64;
 
     @Override
     public Worldcup createWorldcup(WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto, UserAccount userAccount) {
@@ -67,5 +76,36 @@ public class WorldcupServiceImpl implements WorldcupService{
     @Override
     public Optional<Worldcup> findById(Long worldcupId) {
         return worldcupRepository.findById(worldcupId);
+    }
+
+    @Override
+    public List<Integer> getRoundTypes(Long id) {
+        em.flush();
+        Worldcup worldcup = worldcupRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 월드컵의 id입니다."));
+
+        Integer itemsSize = worldcup.getItems().size();
+        System.out.println("itemsSize: "+itemsSize);
+        System.out.println(worldcup);
+        if (itemsSize < MINIMUM_ROUND_TYPE) {
+            throw new IllegalStateException("The number of items in the Worldcup is less than the minimum required.");
+        }
+        List<Integer> roundTypes = new ArrayList<>();
+        Integer dist = MINIMUM_ROUND_TYPE;
+        for (Integer roundType = MINIMUM_ROUND_TYPE; roundType <= MAXIMUM_ROUND_TYPE; roundType += dist) {
+            if (roundType > itemsSize) {
+                break;
+            }
+            roundTypes.add(roundType);
+            dist = roundType;
+        }
+        return roundTypes;
+    }
+
+    @Override
+    public String getTitle(Long id) {
+        Worldcup worldcup = worldcupRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 월드컵의 id입니다."));
+        return worldcup.getTitle();
     }
 }

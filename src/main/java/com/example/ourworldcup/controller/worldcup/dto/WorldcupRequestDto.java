@@ -7,7 +7,6 @@ public class WorldcupRequestDto {
     @Builder
     @Setter
     @Getter
-    @Service
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor

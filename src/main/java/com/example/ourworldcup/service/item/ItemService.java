@@ -10,4 +10,6 @@ public interface ItemService {
     Item saveItem(ItemRequestDto.ItemCreateRequestDto itemCreateRequestDto, Worldcup worldcup);
 
     void deleteItem(Long id);
+
+    Item findById(Long id);
 }
