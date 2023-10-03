@@ -54,9 +54,9 @@ public class AuthConfig {
                 .rememberMe(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/oauth2/**", "/assets/**", "/css/**", "/forms/**", "/js/**","/icons/**",
-                        "/api/**",
-                        "/","/health").permitAll()
+                .requestMatchers("/oauth2/**", "/assets/**", "/css/**", "/forms/**", "/js/**", "/icons/**",
+                        "/api/**", "/**/*.ico",
+                        "/", "/health").permitAll()
                 .anyRequest().authenticated());
 
         http.oauth2Login(oauth -> oauth
