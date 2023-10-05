@@ -25,4 +25,4 @@
 ![image](https://github.com/dbwp031/OurWorldCup/assets/65337423/56c49c74-80d6-495e-819d-32654e0715ed)
 
 ## 포스팅
-- [OurWorldcup release v1.0 리뷰]()
+- [OurWorldcup release v1.0 리뷰](https://dbwp031.tistory.com/78)
