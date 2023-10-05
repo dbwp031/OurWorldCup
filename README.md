@@ -23,3 +23,6 @@
 ![image](https://github.com/dbwp031/OurWorldCup/assets/65337423/d3714011-9b0b-4fcb-bcb5-54e0e8b8b3fa)
 ### - CI/CD pipeline
 ![image](https://github.com/dbwp031/OurWorldCup/assets/65337423/56c49c74-80d6-495e-819d-32654e0715ed)
+
+## 포스팅
+- [OurWorldcup release v1.0 리뷰]()
