@@ -1,6 +1,6 @@
 package com.example.ourworldcup.auth.handler;
 
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

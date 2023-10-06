@@ -4,7 +4,7 @@ import com.example.ourworldcup.auth.authentication.JwtAuthentication;
 import com.example.ourworldcup.auth.dto.Token;
 import com.example.ourworldcup.auth.dto.UidDto;
 import com.example.ourworldcup.auth.dto.UserAccountDto;
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.auth.service.TokenService;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
@@ -19,7 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Optional;
 
 @Component

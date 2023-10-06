@@ -2,7 +2,7 @@ package com.example.ourworldcup.auth.service;
 
 import com.example.ourworldcup.auth.dto.Token;
 import com.example.ourworldcup.auth.dto.UidDto;
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.RoleType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;

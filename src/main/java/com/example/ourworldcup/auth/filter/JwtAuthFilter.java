@@ -2,7 +2,8 @@ package com.example.ourworldcup.auth.filter;
 
 import com.example.ourworldcup.auth.authentication.JwtAuthentication;
 import com.example.ourworldcup.auth.dto.Token;
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.ErrorCode;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.auth.handler.JWTFailureHandler;
 import com.example.ourworldcup.util.component.CookieUtil;
 import jakarta.servlet.FilterChain;
@@ -53,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw ex;
             } catch (Exception exception) {
                 SecurityContextHolder.clearContext();
-                JwtAuthenticationException authenticationException = new JwtAuthenticationException("jwt 인증에 실패했습니다.");
+                JwtAuthenticationException authenticationException = new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
                 this.failureHandler.onAuthenticationFailure(request, response, authenticationException);
                 throw authenticationException;
             }
