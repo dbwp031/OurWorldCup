@@ -2,7 +2,7 @@ package com.example.ourworldcup.auth.service;
 
 import com.example.ourworldcup.auth.dto.Token;
 import com.example.ourworldcup.auth.dto.UidDto;
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.enums.RoleType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
@@ -123,7 +123,7 @@ public class TokenService {
             userAccount.setRefreshToken(newToken.getRefreshToken());
             return newToken;
         } else {
-            throw new JwtAuthenticationException("토큰 재발급에 실패했습니다.", ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
     }
 
@@ -137,19 +137,19 @@ public class TokenService {
 
         if (status.equals(JwtCode.ACCESS)) {
             if (!userAccount.equals(email, authProviderType)) {
-                throw new JwtAuthenticationException("요청한 refreshToken이 멤버 정보와 일치하지 않습니다.", ErrorCode.JWT_BAD_REQUEST);
+                throw new JwtAuthenticationException(ErrorCode.INVALID_TOKEN_EXCEPTION);
             }
             String accessToken = this.generateAccessToken(email, authProviderType, userAccountService.getRoleTypes(userAccount));
             return new Token(accessToken, refreshToken);
         } else if (status.equals(JwtCode.EXPIRED)) {
             if (!userAccount.equals(email, authProviderType)) {
-                throw new JwtAuthenticationException("요청한 refreshToken이 멤버 정보와 일치하지 않습니다.", ErrorCode.JWT_BAD_REQUEST);
+                throw new JwtAuthenticationException(ErrorCode.INVALID_REFRESH_TOKEN);
             }
             Token newToken = this.generateToken(email, authProviderType, userAccountService.getRoleTypes(userAccount));
             userAccount.setRefreshToken(newToken.getRefreshToken());
             return newToken;
         } else {
-            throw new JwtAuthenticationException("토큰 재발급에 실패했습니다.", ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
         }
     }
 }

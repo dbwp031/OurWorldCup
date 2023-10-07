@@ -4,7 +4,7 @@ import com.example.ourworldcup.auth.authentication.JwtAuthentication;
 import com.example.ourworldcup.auth.dto.Token;
 import com.example.ourworldcup.auth.dto.UidDto;
 import com.example.ourworldcup.auth.dto.UserAccountDto;
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.auth.service.TokenService;
 import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
@@ -19,7 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Optional;
 
 @Component
@@ -69,7 +68,7 @@ public class JwtProvider implements AuthenticationProvider {
         } else if (status.equals(TokenService.JwtCode.EXPIRED)) {
             // refresh token 가지고 access token 재발급
             if (refreshToken == null) {
-                throw new JwtAuthenticationException("토큰 재발급을 위해선 refresh token이 필요합니다.", ErrorCode.JWT_BAD_REQUEST);
+                throw new JwtAuthenticationException(ErrorCode.RELOGIN_EXCEPTION);
             }
             TokenService.JwtCode code = validateToken(refreshToken);
             Token newToken = tokenService.reissueToken(refreshToken, code);

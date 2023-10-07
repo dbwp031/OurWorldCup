@@ -1,6 +1,6 @@
 package com.example.ourworldcup.auth.filter;
 
-import com.example.ourworldcup.auth.exception.JwtAuthenticationException;
+import com.example.ourworldcup.exception.handler.JwtAuthenticationException;
 import com.example.ourworldcup.exception.ErrorCode;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -30,7 +30,7 @@ public class JwtExceptionInterceptorFilter extends ExceptionTranslationFilter {
         } catch (JwtAuthenticationException exception) {
             this.sendStartAuthentication(request, response, filterChain, exception);
         } catch (JwtException exception) {
-            JwtAuthenticationException authenticationException = new JwtAuthenticationException(ErrorCode.JWT_SERVER_ERROR.getMessage());
+            JwtAuthenticationException authenticationException = new JwtAuthenticationException(ErrorCode.JWT_SERVER_ERROR);
             this.sendStartAuthentication(request, response, filterChain, authenticationException);
         }
     }

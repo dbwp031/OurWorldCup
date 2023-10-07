@@ -1,5 +1,6 @@
-package com.example.ourworldcup.exception;
+package com.example.ourworldcup.exception.common;
 
+import com.example.ourworldcup.exception.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

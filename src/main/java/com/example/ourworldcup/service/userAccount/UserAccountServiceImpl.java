@@ -51,7 +51,7 @@ public class UserAccountServiceImpl implements UserAccountService{
             Role role = userAccountRole.getRole();
             for (AuthorityType authorityType : role.getRoleType().getAuthorityTypes()) {
                 Authority authority = authorityRepository.findByAuthorityType(authorityType)
-                        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND_ERROR.getMessage()));
+                        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.AUTHORITY_NOT_FOUND.getMessage()));
             }
         }
         List<Authority> authorityList = new ArrayList<Authority>(authorities);
