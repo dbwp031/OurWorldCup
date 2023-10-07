@@ -25,8 +25,8 @@
 ![image](https://github.com/dbwp031/OurWorldCup/assets/65337423/56c49c74-80d6-495e-819d-32654e0715ed)
 
 ## 포스팅
-- [OurWorldcup release v1.0 리뷰](https://dbwp031.tistory.com/78)
-- [Branch 전략 분석 및 선택](https://dbwp031.tistory.com/65)
-- [API 명세서 작성하기](https://dbwp031.tistory.com/64)
-- [ERD 설계하기](https://dbwp031.tistory.com/63)
-- [Figma로 프로젝트 설계하기](https://dbwp031.tistory.com/62)
+- [release/v1.0 | OurWorldcup release v1.0 리뷰](https://dbwp031.tistory.com/78)
+- [develop | Branch 전략 분석 및 선택](https://dbwp031.tistory.com/65)
+- [develop | API 명세서 작성하기](https://dbwp031.tistory.com/64)
+- [develop | ERD 설계하기](https://dbwp031.tistory.com/63)
+- [develop | Figma로 프로젝트 설계하기](https://dbwp031.tistory.com/62)
