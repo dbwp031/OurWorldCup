@@ -68,7 +68,7 @@ public class JwtProvider implements AuthenticationProvider {
         } else if (status.equals(TokenService.JwtCode.EXPIRED)) {
             // refresh token 가지고 access token 재발급
             if (refreshToken == null) {
-                throw new JwtAuthenticationException("토큰 재발급을 위해선 refresh token이 필요합니다.", ErrorCode.JWT_BAD_REQUEST);
+                throw new JwtAuthenticationException(ErrorCode.RELOGIN_EXCEPTION);
             }
             TokenService.JwtCode code = validateToken(refreshToken);
             Token newToken = tokenService.reissueToken(refreshToken, code);

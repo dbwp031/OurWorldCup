@@ -17,7 +17,7 @@ public class JWTFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         JwtAuthenticationException jwtAuthenticationException = (JwtAuthenticationException) exception;
-        response.setStatus(jwtAuthenticationException.getErrorCode().getHttpStatus().value());
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         Cookie accessToken = getCookieValue(request, "accessToken").orElse(new Cookie("accessToken", null));
         Cookie refreshToken = getCookieValue(request, "refreshToken").orElse(new Cookie("refreshToken", null));
@@ -28,7 +28,7 @@ public class JWTFailureHandler implements AuthenticationFailureHandler {
     }
 
     private Optional<Cookie> getCookieValue(HttpServletRequest request, String cookieName) {
-        if(request.getCookies()==null) return null;
+        if(request.getCookies()==null) return Optional.empty();
         return Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equals(cookieName))
                 .findFirst();
