@@ -26,6 +26,7 @@ public class WorldcupRestController {
     private final WorldcupService worldcupService;
     private final ItemService itemService;
     private final MemberService memberService;
+
     @DeleteMapping("/item/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteItem(@PathVariable Long id, HttpSession session, HttpServletResponse response) {
         Worldcup worldcup = (Worldcup) session.getAttribute(SESSION_ATTR_WORLDCUP);
@@ -37,6 +38,7 @@ public class WorldcupRestController {
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
+
     @DeleteMapping("/member/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteMember(@PathVariable Long id) {
         memberService.deleteMemberById(id);
