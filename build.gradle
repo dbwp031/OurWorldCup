@@ -54,6 +54,8 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'

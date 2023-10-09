@@ -3,14 +3,15 @@ package com.example.ourworldcup.repository.item;
 import com.example.ourworldcup.domain.QItem;
 import com.example.ourworldcup.domain.QWorldcup;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-
+@Hidden
 @Repository
 @RequiredArgsConstructor
-public class ItemCustomRepositoryImpl implements ItemCustomRepository{
+public class ItemCustomRepositoryImpl implements ItemCustomRepository {
     private final EntityManager em;
     private final JPAQueryFactory factory;
 
