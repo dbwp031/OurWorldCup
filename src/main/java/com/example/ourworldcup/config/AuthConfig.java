@@ -45,7 +45,7 @@ public class AuthConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -55,7 +55,11 @@ public class AuthConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/oauth2/**", "/assets/**", "/css/**", "/forms/**", "/js/**", "/icons/**",
-                        "/api/**","/favicon.ico",
+                        "/api/**", "/favicon.ico",
+                        "/swagger-ui.html",
+                        "/api-docs",
+                        "/api-docs/**",
+                        "/swagger-ui/**",
                         "/", "/health").permitAll()
                 .anyRequest().authenticated());
         http.oauth2Login(oauth -> oauth
@@ -66,7 +70,7 @@ public class AuthConfig {
                 .userInfoEndpoint(userInfo -> userInfo.userService(staticCustomOAuth2UserService))
                 .successHandler(staticOAuth2SuccessHandler)
                 .failureHandler(staticOAuth2FailureHandler)
-                );
+        );
 
         http.addFilterAt(staticSecurityConfig.jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(staticSecurityConfig.jwtExceptionInterceptorFilter(), JwtAuthFilter.class);
