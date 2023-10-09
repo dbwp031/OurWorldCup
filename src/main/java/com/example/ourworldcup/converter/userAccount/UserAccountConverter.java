@@ -5,7 +5,10 @@ import com.example.ourworldcup.auth.dto.UserAccountDto;
 import com.example.ourworldcup.controller.userAccount.dto.UserAccountResponseDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
+import com.example.ourworldcup.domain.enums.AuthProviderType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
+import com.example.ourworldcup.exception.ErrorCode;
+import com.example.ourworldcup.exception.handler.UserAccountException;
 import com.example.ourworldcup.repository.UserAccountRepository;
 import com.example.ourworldcup.repository.WorldcupRepository;
 import jakarta.annotation.PostConstruct;
@@ -13,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,14 @@ public class UserAccountConverter {
     private final WorldcupRepository worldcupRepository;
     private static UserAccountRepository staticUserAccountRepository;
     private static WorldcupRepository staticWorldcupRepository;
+
+    public static UserAccount toUserAccount(UserAccountDto userAccountDto) {
+        String email = userAccountDto.getEmail();
+        AuthProviderType authProviderType = userAccountDto.getAuthProviderType();
+
+        return staticUserAccountRepository.findByEmailAndAuthProvider_AuthProviderType(email, authProviderType)
+                .orElseThrow(() -> new UserAccountException(ErrorCode.USER_ACCOUNT_NOT_FOUND));
+    }
 
     @PostConstruct
     public void init() {

@@ -1,20 +1,20 @@
 package com.example.ourworldcup.config;
 
+import com.example.ourworldcup.auth.AuthUserArgumentResolver;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:8080",
-//                        "https://kauth.kakao.com",
-//                        "https://accounts.kakao.com")
-//                .allowedMethods("*")
-//                .allowedHeaders("*")
-//                .allowCredentials(true)
-//                .maxAge(3600);
-//    }
+    private final AuthUserArgumentResolver authUserArgumentResolver;
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolverList) {
+        resolverList.add(authUserArgumentResolver);
+    }
 }

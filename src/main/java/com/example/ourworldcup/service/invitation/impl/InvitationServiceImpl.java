@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
@@ -62,7 +61,7 @@ public class InvitationServiceImpl implements InvitationService {
                 .scheme(securityProperties.getScheme())
                 .port(securityProperties.getPort())
                 .host(securityProperties.getDefaultHost())
-                .path("/worldcup/join")
+                .path("/invi/join")
                 .queryParam("token", invitation.getUuid().getUuid())
                 .toUriString();
 
@@ -70,8 +69,9 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public Optional<Invitation> findByUuid(String uuid) {
-        return invitationRepository.findByUuid_Uuid(uuid);
+    public Invitation findByUuid(String uuid) {
+        return invitationRepository.findByUuid_Uuid(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 uuid입니다"));
     }
 
     public Uuid createUUID() {
