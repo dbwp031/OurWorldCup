@@ -1,7 +1,6 @@
 package com.example.ourworldcup.controller.worldcup.dto;
 
 import com.example.ourworldcup.controller.game.dto.GameResponseDto;
-import com.example.ourworldcup.domain.relation.Member;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class WorldcupResponseDto {
         private String invitationCode;
         private String password;
     }
+
     @Builder
     @Getter
     @Setter
@@ -35,6 +35,7 @@ public class WorldcupResponseDto {
         private String content;
         private List<MemberResponseDto.BasicDto> members;
     }
+
     @Builder
     @Getter
     @Setter
@@ -48,7 +49,7 @@ public class WorldcupResponseDto {
         private List<GameResponseDto.ResultDto> games;
     }
 
-        @Builder
+    @Builder
     @Getter
     @Setter
     @ToString
@@ -59,17 +60,19 @@ public class WorldcupResponseDto {
         private String title;
         private String base64Image;
     }
+
     @Builder
     @Getter
     @Setter
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class InvitationDto {
+    public static class PreviewDto {
         private Long id;
         private String title;
         private String content;
     }
+
     @Builder
     @Setter
     @Getter

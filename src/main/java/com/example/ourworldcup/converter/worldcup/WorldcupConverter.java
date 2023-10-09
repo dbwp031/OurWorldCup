@@ -22,6 +22,7 @@ public class WorldcupConverter {
     private final GameService gameService;
     private static InvitationService staticInvitationService;
     private static GameService staticGameService;
+
     @PostConstruct
     public void init() {
         staticInvitationService = invitationService;
@@ -40,8 +41,8 @@ public class WorldcupConverter {
                 .build();
     }
 
-    public static WorldcupResponseDto.InvitationDto toWorldcupResponseInvitationDto(Worldcup worldcup) {
-        return WorldcupResponseDto.InvitationDto.builder()
+    public static WorldcupResponseDto.PreviewDto toWorldcupResponsePreviewDto(Worldcup worldcup) {
+        return WorldcupResponseDto.PreviewDto.builder()
                 .id(worldcup.getId())
                 .title(worldcup.getTitle())
                 .content(worldcup.getContent())
