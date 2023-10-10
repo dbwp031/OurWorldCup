@@ -59,7 +59,7 @@ export function getUrlParameter(sParam) {
     }
 }
 
-export function redirect(targetUrl) {
+function redirect(targetUrl) {
     window.location.href = getBaseUrl() + targetUrl;
 }
 

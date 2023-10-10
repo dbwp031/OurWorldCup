@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /*
@@ -93,16 +92,15 @@ public class WorldcupServiceImpl implements WorldcupService {
      * */
 
     @Override
-    public Optional<Worldcup> findById(Long worldcupId) {
-        return worldcupRepository.findById(worldcupId);
+    public Worldcup findById(Long worldcupId) {
+        return worldcupRepository.findById(worldcupId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 worldcupId가 없습니다."));
     }
 
     @Override
     public List<Integer> getRoundTypes(Long id) {
         em.flush();
-        Worldcup worldcup = worldcupRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 월드컵의 id입니다."));
-
+        Worldcup worldcup = this.findById(id);
         Integer itemsSize = worldcup.getItems().size();
         System.out.println("itemsSize: " + itemsSize);
         System.out.println(worldcup);
@@ -123,8 +121,7 @@ public class WorldcupServiceImpl implements WorldcupService {
 
     @Override
     public String getTitle(Long id) {
-        Worldcup worldcup = worldcupRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 월드컵의 id입니다."));
+        Worldcup worldcup = this.findById(id);
         return worldcup.getTitle();
     }
 }

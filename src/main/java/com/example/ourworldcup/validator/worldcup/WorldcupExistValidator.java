@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class WorldcupExistValidator implements ConstraintValidator<ExistWorldcup, Long> {
+    private static final ThreadLocal<Long> worldcupIdHolder = new ThreadLocal<>();
     private final WorldcupRepository worldcupRepository;
     private static WorldcupRepository staticWorldcupRepository;
 

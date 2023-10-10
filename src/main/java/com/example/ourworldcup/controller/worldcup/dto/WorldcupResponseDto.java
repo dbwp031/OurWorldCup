@@ -83,4 +83,17 @@ public class WorldcupResponseDto {
         @Builder.Default
         private List<WorldcupItemDto> items = new ArrayList<>();
     }
+
+    @Builder
+    @Setter
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RoundTypesDto {
+        private Long id;
+        private String title;
+        private String content;
+        private List<Integer> roundTypes;
+    }
 }

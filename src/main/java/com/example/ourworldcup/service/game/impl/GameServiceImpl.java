@@ -16,6 +16,7 @@ import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.repository.item.ItemRepository;
 import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.item.ItemService;
+import com.example.ourworldcup.service.worldcup.WorldcupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class GameServiceImpl implements GameService {
@@ -36,9 +37,16 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+    private final WorldcupService worldcupService;
 
+    @Transactional
     @Override
     public Game createGame(Long userAccountId, Long worldcupId, Long initialRound, PickType pickType) {
+
+        if (!worldcupService.getRoundTypes(worldcupId).contains(initialRound.intValue())) {
+            throw new IllegalArgumentException("해당 initialRound는 올바르지 않습니다.");
+        }
+
         UserAccount userAccount = userAccountRepository.getReferenceById(userAccountId);
         Worldcup worldcup = worldcupRepository.findById(worldcupId)
                 .orElseThrow(() -> new IllegalArgumentException("월드컵 아이디가 잘못됐습니다."));
@@ -67,6 +75,7 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new IllegalArgumentException("Game 아이디가 존재하지 않습니다."));
     }
 
+    @Transactional
     @Override
     public List<Round> initializeRounds(Worldcup worldcup, Game game, Long roundType, PickType pickType) {
         List<Item> items = worldcup.getItems();

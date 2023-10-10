@@ -9,6 +9,7 @@ import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.RoundType;
 import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.invitation.InvitationService;
+import com.example.ourworldcup.service.worldcup.WorldcupService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,16 @@ import java.util.List;
 public class WorldcupConverter {
     private final InvitationService invitationService;
     private final GameService gameService;
+    private final WorldcupService worldcupService;
     private static InvitationService staticInvitationService;
     private static GameService staticGameService;
+    private static WorldcupService staticWorldcupService;
 
     @PostConstruct
     public void init() {
         staticInvitationService = invitationService;
         staticGameService = gameService;
+        staticWorldcupService = worldcupService;
     }
 
     public static WorldcupResponseDto.BasicDto toWorldcupResponseBasicDto(Worldcup worldcup) {
@@ -71,6 +75,17 @@ public class WorldcupConverter {
                 .title(worldcup.getTitle())
                 .content(worldcup.getContent())
                 .games(games)
+                .build();
+    }
+
+    public static WorldcupResponseDto.RoundTypesDto toWorldcupResponseRoundTypesDto(Worldcup worldcup) {
+        List<Integer> roundTypes = staticWorldcupService.getRoundTypes(worldcup.getId());
+
+        return WorldcupResponseDto.RoundTypesDto.builder()
+                .id(worldcup.getId())
+                .title(worldcup.getTitle())
+                .content(worldcup.getContent())
+                .roundTypes(roundTypes)
                 .build();
     }
 }

@@ -7,7 +7,6 @@ import com.example.ourworldcup.domain.constant.MemberRole;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface WorldcupService {
     Worldcup createWorldcup(WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto, UserAccount userAccount);
@@ -18,7 +17,7 @@ public interface WorldcupService {
 
     void enrollUserAccount(Invitation invitation, UserAccount userAccount, MemberRole memberRole);
 
-    Optional<Worldcup> findById(Long worldcupId);
+    Worldcup findById(Long worldcupId);
 
     List<Integer> getRoundTypes(Long id);
 

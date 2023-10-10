@@ -15,8 +15,8 @@ import com.example.ourworldcup.domain.game.Game;
 import com.example.ourworldcup.dto.VsResultDto;
 import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.service.game.GameService;
-import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.service.item.ItemService;
+import com.example.ourworldcup.service.worldcup.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,9 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -62,8 +60,7 @@ public class WorldcupController {
     @GetMapping("/new/items")
     public String renderWorldcupItemsCreationForm(ModelMap map, HttpSession httpSession) throws Exception {
         Worldcup sessionWorldcup = (Worldcup) httpSession.getAttribute(SESSION_ATTR_WORLDCUP);
-        Worldcup worldcup = worldcupService.findById(sessionWorldcup.getId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 id의 월드컵이 존재하지 않습니다"));
+        Worldcup worldcup = worldcupService.findById(sessionWorldcup.getId());
         WorldcupResponseDto.WorldcupItemsDto worldcupItemsDto = new WorldcupResponseDto.WorldcupItemsDto();
         List<WorldcupResponseDto.WorldcupItemDto> itemsDto = worldcup.getItems().stream().map(a -> {
             try {
@@ -123,7 +120,7 @@ public class WorldcupController {
     @GetMapping("/{worldcupId}/details")
     public String renderWorldcupDetails(@PathVariable Long worldcupId,
                                         ModelMap modelMap) {
-        Worldcup worldcup = worldcupService.findById(worldcupId).get();
+        Worldcup worldcup = worldcupService.findById(worldcupId);
         WorldcupResponseDto.BasicDto worldcupResponseBaseDto = WorldcupConverter.toWorldcupResponseBasicDto(worldcup);
         modelMap.addAttribute("worldcupDto", worldcupResponseBaseDto);
         return "worldcup/detail";
@@ -132,23 +129,25 @@ public class WorldcupController {
     @GetMapping("/{worldcupId}/members")
     public String renderWorldcupMembers(@PathVariable Long worldcupId,
                                         ModelMap modelMap) {
-        Optional<Worldcup> worldcup = worldcupService.findById(worldcupId);
-        if (worldcup.isPresent()) {
-            WorldcupResponseDto.MembersDto worldcupResponseMembersDto = WorldcupConverter.toWorldcupResponseMembersDto(worldcup.get());
-            modelMap.addAttribute("worldcupDto", worldcupResponseMembersDto);
-            return "worldcup/members";
-        }
-        return "error";
+        Worldcup worldcup = worldcupService.findById(worldcupId);
+        WorldcupResponseDto.MembersDto worldcupResponseMembersDto = WorldcupConverter.toWorldcupResponseMembersDto(worldcup);
+        modelMap.addAttribute("worldcupDto", worldcupResponseMembersDto);
+        return "worldcup/members";
     }
 
+    /*
+     * 특정 월드컵에 대한 게임을 만드는 것이기 때문에 Worldcup - Game의 계층관계가 명확하다.
+     * 이렇게 명확할 때에는 path variable을 사용한다.
+     *
+     * 그렇지 않을 경우엔 query paramter을 사용할 수 있다.
+     * */
     @GetMapping("/{worldcupId}/game/new")
-    public String renderGameSettingPage(@PathVariable Long worldcupId,
-                                        ModelMap modelMap) {
-        List<Integer> roundTypes = worldcupService.getRoundTypes(worldcupId);
-        String worldcupTitle = worldcupService.getTitle(worldcupId);
-        modelMap.addAttribute("worldcupId", worldcupId);
-        modelMap.addAttribute("worldcupTitle", worldcupTitle);
-        modelMap.addAttribute("roundTypes", roundTypes);
+    public String renderGameSettingPage() {
+//        List<Integer> roundTypes = worldcupService.getRoundTypes(worldcupId);
+//        String worldcupTitle = worldcupService.getTitle(worldcupId);
+//        modelMap.addAttribute("worldcupId", worldcupId);
+//        modelMap.addAttribute("worldcupTitle", worldcupTitle);
+//        modelMap.addAttribute("roundTypes", roundTypes);
         return "game/setting";
     }
 
@@ -164,7 +163,7 @@ public class WorldcupController {
     @GetMapping("/{worldcupId}/games")
     public String renderGamesPage(@PathVariable Long worldcupId,
                                   ModelMap modelMap) {
-        WorldcupResponseDto.GamesDto gamesDto = WorldcupConverter.toWorldcupResponseGamesDto(worldcupService.findById(worldcupId).orElseThrow(() -> new IllegalArgumentException("해당 월드컵 id가 존재하지 않습니다")));
+        WorldcupResponseDto.GamesDto gamesDto = WorldcupConverter.toWorldcupResponseGamesDto(worldcupService.findById(worldcupId));
         modelMap.addAttribute("gamesDto", gamesDto);
         return "worldcup/games";
     }

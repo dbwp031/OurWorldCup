@@ -1,6 +1,13 @@
 package com.example.ourworldcup.controller.worldcup;
 
+import com.example.ourworldcup.auth.AuthUser;
+import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
+import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
+import com.example.ourworldcup.domain.constant.PickType;
+import com.example.ourworldcup.domain.game.Game;
+import com.example.ourworldcup.domain.userAccount.UserAccount;
+import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.item.ItemService;
 import com.example.ourworldcup.service.member.MemberService;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
@@ -9,10 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +30,7 @@ public class WorldcupRestController {
     private final WorldcupService worldcupService;
     private final ItemService itemService;
     private final MemberService memberService;
+    private final GameService gameService;
 
     @DeleteMapping("/item/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteItem(@PathVariable Long id, HttpSession session, HttpServletResponse response) {
@@ -47,4 +52,34 @@ public class WorldcupRestController {
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
+
+    @GetMapping("/{worldcupId}/roundTypes")
+    public ResponseEntity<WorldcupResponseDto.RoundTypesDto> getRoundTypes(@PathVariable Long worldcupId) {
+        Worldcup worldcup = worldcupService.findById(worldcupId);
+        return ResponseEntity.ok(WorldcupConverter.toWorldcupResponseRoundTypesDto(worldcup));
+    }
+
+    @PostMapping("/{worldcupId}/game")
+    public ResponseEntity<Map<String, Long>> createGame(@PathVariable Long worldcupId,
+                                                        @RequestParam Long initRound,
+                                                        @AuthUser UserAccount userAccount) {
+
+        Game game = gameService.createGame(userAccount.getId(), worldcupId, initRound, PickType.ORDER);
+        Map<String, Long> responseMap = new HashMap<>();
+        System.out.println("GAME");
+        System.out.println(game.getId());
+        responseMap.put("gameId", game.getId());
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
 }
+
+
+//    @GetMapping("/{worldcupId}/game/new/round/{round}")
+//    public String createGame(@PathVariable Long worldcupId,
+//                             @PathVariable(value = "round") Long initialRound,
+//                             Authentication authentication) {
+//        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+//        Game game = gameService.createGame(jwtAuthentication.getPrincipalDetails().getId(), worldcupId, initialRound, PickType.ORDER);
+//        return String.format("redirect:/game/%d", game.getId());
+//    }
