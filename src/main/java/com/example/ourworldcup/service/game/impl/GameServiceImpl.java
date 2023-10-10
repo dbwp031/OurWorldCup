@@ -36,6 +36,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+
     @Override
     public Game createGame(Long userAccountId, Long worldcupId, Long initialRound, PickType pickType) {
         UserAccount userAccount = userAccountRepository.getReferenceById(userAccountId);
@@ -43,7 +44,7 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new IllegalArgumentException("월드컵 아이디가 잘못됐습니다."));
 
         RoundType initialRoundType = RoundType.getRoundType(initialRound);
-        Game game =  Game.builder()
+        Game game = Game.builder()
                 .worldcup(worldcup)
                 .player(userAccount)
                 .gameType(GameType.TOURNAMENT)
@@ -71,7 +72,7 @@ public class GameServiceImpl implements GameService {
         List<Item> items = worldcup.getItems();
         List<Integer> pickForm = pickType.getPickOrder(roundType);
         List<Round> initialRounds = new ArrayList<>();
-        for (int i = 0; i < pickForm.size(); i+=2) {
+        for (int i = 0; i < pickForm.size(); i += 2) {
             Round round = Round.builder()
                     .worldcup(worldcup)
                     .game(game)
@@ -90,7 +91,7 @@ public class GameServiceImpl implements GameService {
         AtomicReference<Long> roundSum = new AtomicReference<>((long) 0);
         Arrays.stream(RoundType.values()).forEach(
                 r -> {
-                    if (r.getStageOrder()>= game.getInitialRoundType().getStageOrder() &&   r.getStageOrder() < game.getCurrentRoundType().getStageOrder()) {
+                    if (r.getStageOrder() >= game.getInitialRoundType().getStageOrder() && r.getStageOrder() < game.getCurrentRoundType().getStageOrder()) {
                         roundSum.updateAndGet(v -> v + r.getTotalRounds());
                     }
                 }
@@ -140,14 +141,14 @@ public class GameServiceImpl implements GameService {
         long[] stageSplitIndexes = null;
         long[] stagePoint = null;
         if (source.getInitialRoundType().equals(RoundType.ROUND16)) {
-            stageSplitIndexes = new long[]{7,11,13,14};
-            stagePoint = new long[]{1,2,3,4};
+            stageSplitIndexes = new long[]{7, 11, 13, 14};
+            stagePoint = new long[]{1, 2, 3, 4};
         } else if (source.getInitialRoundType().equals(RoundType.ROUND8)) {
             stageSplitIndexes = new long[]{4, 6, 7};
-            stagePoint = new long[]{1,2,3};
+            stagePoint = new long[]{1, 2, 3};
         } else if (source.getInitialRoundType().equals(RoundType.ROUND4)) {
             stageSplitIndexes = new long[]{2, 3};
-            stagePoint = new long[]{1,2};
+            stagePoint = new long[]{1, 2};
         } else {
             throw new RuntimeException("16강 이후의 케이스는 아직 구현하지 않았습니다.");
         }
@@ -160,7 +161,7 @@ public class GameServiceImpl implements GameService {
         while (currentStageSplitIndex < stageSplitIndexes.length) {
             List<Long> sourceSelectedItem = new ArrayList<>();
             List<Long> targetSelectedItem = new ArrayList<>();
-            while (index<stageSplitIndexes[currentStageSplitIndex]) {
+            while (index < stageSplitIndexes[currentStageSplitIndex]) {
                 sourceSelectedItem.add(sourceRounds.get(index).getSelectedItem());
                 targetSelectedItem.add(targetRounds.get(index).getSelectedItem());
                 index += 1;
