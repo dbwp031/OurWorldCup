@@ -1,6 +1,5 @@
 package com.example.ourworldcup.controller.invitation;
 
-import com.example.ourworldcup.auth.AuthUser;
 import com.example.ourworldcup.controller.invitation.dto.InvitationResponseDto;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.converter.invitation.InvitationConverter;
@@ -9,6 +8,7 @@ import com.example.ourworldcup.domain.Invitation;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.MemberRole;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
+import com.example.ourworldcup.resolver.authUser.AuthUser;
 import com.example.ourworldcup.service.invitation.InvitationService;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
 import com.example.ourworldcup.validator.inviToken.ExistInviToken;
@@ -54,7 +54,7 @@ public class InvitationRestController {
     @PostMapping("/join")
     public ResponseEntity<WorldcupResponseDto.PreviewDto> joinWorldcup(@RequestParam @ExistInviToken String token,
                                                                        @AuthUser UserAccount userAccount) {
-        
+
         System.out.println(userAccount.toString());
         Invitation invitation = invitationService.findByUuid(token);
         Worldcup worldcup = worldcupService.findByInvitation(invitation);

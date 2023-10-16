@@ -1,12 +1,12 @@
 package com.example.ourworldcup.controller.worldcup;
 
-import com.example.ourworldcup.auth.AuthUser;
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
 import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.PickType;
 import com.example.ourworldcup.domain.game.Game;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
+import com.example.ourworldcup.resolver.authUser.AuthUser;
 import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.item.ItemService;
 import com.example.ourworldcup.service.member.MemberService;

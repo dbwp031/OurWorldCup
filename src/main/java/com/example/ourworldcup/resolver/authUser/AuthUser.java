@@ -1,4 +1,4 @@
-package com.example.ourworldcup.auth;
+package com.example.ourworldcup.resolver.authUser;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

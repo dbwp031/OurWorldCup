@@ -1,6 +1,6 @@
 package com.example.ourworldcup.config;
 
-import com.example.ourworldcup.auth.AuthUserArgumentResolver;
+import com.example.ourworldcup.resolver.authUser.AuthUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

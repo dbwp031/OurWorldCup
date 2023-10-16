@@ -1,4 +1,4 @@
-package com.example.ourworldcup.auth;
+package com.example.ourworldcup.resolver.authUser;
 
 import com.example.ourworldcup.auth.dto.UserAccountDto;
 import com.example.ourworldcup.converter.userAccount.UserAccountConverter;
