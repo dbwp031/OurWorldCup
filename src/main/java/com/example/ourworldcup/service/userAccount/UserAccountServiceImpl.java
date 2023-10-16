@@ -14,35 +14,40 @@ import com.example.ourworldcup.repository.UserAccountRepository;
 import com.example.ourworldcup.repository.UserAccountRoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class UserAccountServiceImpl implements UserAccountService{
+public class UserAccountServiceImpl implements UserAccountService {
     private final RoleRepository roleRepository;
     private final UserAccountRoleRepository userAccountRoleRepository;
     private final AuthorityRepository authorityRepository;
     private final UserAccountRepository userAccountRepository;
+
+    @Override
+    public UserAccount findById(Long id) {
+        return userAccountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 userAccount가 존재하지 않습니다."));
+    }
 
     @Transactional
     @Override
     public void setRoles(UserAccount userAccount, List<RoleType> roles) {
         for (RoleType roleType : roles) {
             Role role = roleRepository.findByRoleType(roleType);
-            UserAccountRole userAccountRole =  UserAccountRole.builder()
+            UserAccountRole userAccountRole = UserAccountRole.builder()
                     .role(role)
                     .userAccount(userAccount)
                     .build();
             userAccountRoleRepository.save(userAccountRole);
         }
     }
+
     @Transactional
     @Override
     public List<Authority> getAuthorities(UserAccount userAccount) {
@@ -63,12 +68,14 @@ public class UserAccountServiceImpl implements UserAccountService{
         return getRole(userAccount).stream()
                 .map(Role::getRoleType).toList();
     }
+
     @Override
     public List<Role> getRole(UserAccount userAccount) {
         List<Role> roles = userAccount.getUserAccountRoles().stream()
                 .map(UserAccountRole::getRole).toList();
         return roles;
     }
+
     @Transactional
     @Override
     public Optional<UserAccount> findByEmailAndAuthProviderType(String email, AuthProviderType authProviderType) {

@@ -20,6 +20,7 @@ import java.util.List;
 public class RoundServiceImpl implements RoundService {
     private final RoundRepository roundRepository;
     private final GameService gameService;
+
     @Override
     public Round findById(Long id) {
         return roundRepository.findById(id)
@@ -58,9 +59,9 @@ public class RoundServiceImpl implements RoundService {
     public List<Round> createNewStageRoundsOnlyIfStageEnded(Game game) {
         Long roundNumIdx = 0L;
         List<Round> newRounds = new ArrayList<>();
-        for (long i = game.getCurrentRoundOrder() - game.getCurrentRoundType().getTotalRounds(); i < game.getCurrentRoundOrder(); i+=2) {
+        for (long i = game.getCurrentRoundOrder() - game.getCurrentRoundType().getTotalRounds(); i < game.getCurrentRoundOrder(); i += 2) {
             Long newItem1Num = game.getRounds().get((int) i).getSelectedItem();
-            Long newItem2Num = game.getRounds().get((int) i+1).getSelectedItem();
+            Long newItem2Num = game.getRounds().get((int) i + 1).getSelectedItem();
             Round newRound = Round.builder()
                     .worldcup(game.getWorldcup())
                     .game(game)
@@ -68,7 +69,7 @@ public class RoundServiceImpl implements RoundService {
                     .item1(newItem1Num)
                     .item2(newItem2Num)
                     .build();
-            roundNumIdx+=1L;
+            roundNumIdx += 1L;
             roundRepository.save(newRound);
             newRounds.add(newRound);
         }
@@ -81,7 +82,7 @@ public class RoundServiceImpl implements RoundService {
         if (game.getCurrentRoundOrder().equals(game.getNextStageEndRoundOrder())) {
             game.addRounds(createNewStageRoundsOnlyIfStageEnded(game));
             game.setCurrentRoundType(RoundType.getNextRoundType(game.getCurrentRoundType()));
-            game.setNextStageEndRoundOrder(game.getNextStageEndRoundOrder()+game.getCurrentRoundType().getTotalRounds());
+            game.setNextStageEndRoundOrder(game.getNextStageEndRoundOrder() + game.getCurrentRoundType().getTotalRounds());
             return;
         }
         return;
@@ -102,7 +103,7 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public Boolean checkFinished(Long gameId) {
         Game game = gameService.findById(gameId);
-        return game.getCurrentRoundType().equals(RoundType.ROUND1);
+        return game.getCurrentRoundType().equals(RoundType.ROUND2);
     }
 
     @Override

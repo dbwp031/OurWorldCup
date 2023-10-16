@@ -12,10 +12,9 @@ import com.example.ourworldcup.dto.VsResultDto;
 import com.example.ourworldcup.repository.GameRepository;
 import com.example.ourworldcup.repository.RoundRepository;
 import com.example.ourworldcup.repository.UserAccountRepository;
-import com.example.ourworldcup.repository.WorldcupRepository;
-import com.example.ourworldcup.repository.item.ItemRepository;
 import com.example.ourworldcup.service.game.GameService;
 import com.example.ourworldcup.service.item.ItemService;
+import com.example.ourworldcup.service.userAccount.UserAccountService;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,9 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GameServiceImpl implements GameService {
     private final RoundRepository roundRepository;
     private final UserAccountRepository userAccountRepository;
-    private final WorldcupRepository worldcupRepository;
     private final GameRepository gameRepository;
-    private final ItemRepository itemRepository;
+
+    private final UserAccountService userAccountService;
     private final ItemService itemService;
     private final WorldcupService worldcupService;
 
@@ -47,9 +46,8 @@ public class GameServiceImpl implements GameService {
             throw new IllegalArgumentException("해당 initialRound는 올바르지 않습니다.");
         }
 
-        UserAccount userAccount = userAccountRepository.getReferenceById(userAccountId);
-        Worldcup worldcup = worldcupRepository.findById(worldcupId)
-                .orElseThrow(() -> new IllegalArgumentException("월드컵 아이디가 잘못됐습니다."));
+        UserAccount userAccount = userAccountService.findById(userAccountId);
+        Worldcup worldcup = worldcupService.findById(worldcupId);
 
         RoundType initialRoundType = RoundType.getRoundType(initialRound);
         Game game = Game.builder()
@@ -128,7 +126,7 @@ public class GameServiceImpl implements GameService {
     public List<VsResultDto> getVsResults(Long gameId) {
         Game source = this.findById(gameId);
         List<Game> games = gameRepository.findAll().stream()
-                .filter(g -> g.getCurrentRoundType().equals(RoundType.ROUND1) && g.getCurrentRoundOrder().equals(g.getNextStageEndRoundOrder()))
+                .filter(g -> g.getCurrentRoundType().equals(RoundType.ROUND2) && g.getCurrentRoundOrder().equals(g.getNextStageEndRoundOrder()))
                 .filter(g -> !Objects.equals(g.getId(), gameId))
                 .toList();
         List<VsResultDto> vsResultDtos = new ArrayList<>();
