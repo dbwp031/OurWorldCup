@@ -4,6 +4,7 @@ import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.domain.Invitation;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.MemberRole;
+import com.example.ourworldcup.domain.constant.RoundType;
 import com.example.ourworldcup.domain.relation.Member;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.repository.MemberRepository;
@@ -24,7 +25,7 @@ import java.util.List;
  * createWorldcup 트랜잭션 생성 -> enrollUserAccount 트랜잭션X: 하나의 트랜잭션 안에서 모든 기능 수행
  * 명시적으로 메서드가 새로운 트랜잭션을 시작하려고 하려면 -> @Transactional(propagation=Propagation.REQUIRES_NEW)를 사용하면 된다.
  * */
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class WorldcupServiceImpl implements WorldcupService {
@@ -37,6 +38,7 @@ public class WorldcupServiceImpl implements WorldcupService {
     private final static Integer MINIMUM_ROUND_TYPE = 4;
     private final static Integer MAXIMUM_ROUND_TYPE = 64;
 
+    @Transactional
     @Override
     public Worldcup createWorldcup(WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto, UserAccount userAccount) {
         Worldcup worldcup = Worldcup.builder()
@@ -59,6 +61,7 @@ public class WorldcupServiceImpl implements WorldcupService {
 
     }
 
+    @Transactional
     @Override
     public void enrollUserAccount(Worldcup worldcup, UserAccount userAccount, MemberRole memberRole) {
         Member member = Member.builder()
@@ -69,6 +72,7 @@ public class WorldcupServiceImpl implements WorldcupService {
         memberRepository.save(member);
     }
 
+    @Transactional
     @Override
     public void enrollUserAccount(Invitation invitation, UserAccount userAccount, MemberRole memberRole) {
         Worldcup worldcup = invitation.getWorldcup();
@@ -119,9 +123,11 @@ public class WorldcupServiceImpl implements WorldcupService {
         return roundTypes;
     }
 
+    /*
+     *   Worldcup 객체 자체를 받아야 할까? Worldcup의 id를 받아야 할까?
+     * */
     @Override
-    public String getTitle(Long id) {
-        Worldcup worldcup = this.findById(id);
-        return worldcup.getTitle();
+    public Boolean canSupportRoundType(Worldcup worldcup, RoundType roundType) {
+        return worldcup.getItems().size() >= roundType.getItemsNum();
     }
 }

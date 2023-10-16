@@ -4,6 +4,7 @@ import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.domain.Invitation;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.MemberRole;
+import com.example.ourworldcup.domain.constant.RoundType;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface WorldcupService {
 
     List<Integer> getRoundTypes(Long id);
 
-    String getTitle(Long id);
+    Boolean canSupportRoundType(Worldcup worldcup, RoundType roundType);
 }
