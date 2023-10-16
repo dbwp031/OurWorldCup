@@ -60,26 +60,10 @@ public class WorldcupRestController {
     }
 
     @PostMapping("/{worldcupId}/game")
-    public ResponseEntity<Map<String, Long>> createGame(@PathVariable Long worldcupId,
-                                                        @RequestParam Long initRound,
-                                                        @AuthUser UserAccount userAccount) {
-
+    public ResponseEntity<Map<String, Long>> createGame(@PathVariable Long worldcupId, @RequestParam Long initRound, @AuthUser UserAccount userAccount) {
         Game game = gameService.createGame(userAccount.getId(), worldcupId, initRound, PickType.ORDER);
         Map<String, Long> responseMap = new HashMap<>();
-        System.out.println("GAME");
-        System.out.println(game.getId());
         responseMap.put("gameId", game.getId());
-
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 }
-
-
-//    @GetMapping("/{worldcupId}/game/new/round/{round}")
-//    public String createGame(@PathVariable Long worldcupId,
-//                             @PathVariable(value = "round") Long initialRound,
-//                             Authentication authentication) {
-//        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
-//        Game game = gameService.createGame(jwtAuthentication.getPrincipalDetails().getId(), worldcupId, initialRound, PickType.ORDER);
-//        return String.format("redirect:/game/%d", game.getId());
-//    }

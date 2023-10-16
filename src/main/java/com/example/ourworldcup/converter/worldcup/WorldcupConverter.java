@@ -67,7 +67,7 @@ public class WorldcupConverter {
 
     public static WorldcupResponseDto.GamesDto toWorldcupResponseGamesDto(Worldcup worldcup) {
         List<GameResponseDto.ResultDto> games = staticGameService.findGamesByWorldcupId(worldcup.getId()).stream()
-                .filter(g -> g.getCurrentRoundType().equals(RoundType.ROUND1) && g.getCurrentRoundOrder().equals(g.getNextStageEndRoundOrder()))
+                .filter(g -> g.getCurrentRoundType().equals(RoundType.ROUND2) && g.getCurrentRoundOrder().equals(g.getNextStageEndRoundOrder()))
                 .map(GameConverter::toGameResponseResultDto)
                 .toList();
         return WorldcupResponseDto.GamesDto.builder()

@@ -143,11 +143,6 @@ public class WorldcupController {
      * */
     @GetMapping("/{worldcupId}/game/new")
     public String renderGameSettingPage() {
-//        List<Integer> roundTypes = worldcupService.getRoundTypes(worldcupId);
-//        String worldcupTitle = worldcupService.getTitle(worldcupId);
-//        modelMap.addAttribute("worldcupId", worldcupId);
-//        modelMap.addAttribute("worldcupTitle", worldcupTitle);
-//        modelMap.addAttribute("roundTypes", roundTypes);
         return "game/setting";
     }
 
