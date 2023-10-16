@@ -10,7 +10,8 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 public class Invitation extends AuditingFields {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ToString.Exclude
@@ -19,4 +20,12 @@ public class Invitation extends AuditingFields {
 
     @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
     Uuid uuid;
+
+    public void setWorldcup(Worldcup worldcup) {
+        this.worldcup = worldcup;
+    }
+
+    public void setUuid(Uuid uuid) {
+        this.uuid = uuid;
+    }
 }
