@@ -1,10 +1,8 @@
 package com.example.ourworldcup.service.worldcup.impl;
 
 import com.example.ourworldcup.aws.s3.FileService;
-import com.example.ourworldcup.controller.worldcup.dto.WorldcupRequestDto;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.RoundType;
-import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.fixtures.WorldcupFixtures;
 import com.example.ourworldcup.repository.WorldcupRepository;
 import com.example.ourworldcup.service.worldcup.WorldcupServiceImpl;
@@ -18,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,42 +32,19 @@ class WorldcupServiceImplTest {
     @Mock
     private FileService fileService;
 
-    @DisplayName("월드컵 생성 정보를 제공하여 생성하면, 월드컵이 올바르게 생성된다.")
+    @DisplayName("월드컵이 주어지면, 가능한 round type이 모두 주어지는 지 확인한다.")
     @Test
-    void givenWorldcupCreateRequestDto_whenCreateWorldcup_thenReturnCorrectlyCreatedWorldcup() {
+    void validAllRoundTypes_basedOnWorldcup() {
         // Given
-        Long id = 1L;
-        String title = "테스트 타이틀";
-        String content = "테스트 컨텐츠";
-        String password = "테스트 패스워드";
-        WorldcupRequestDto.WorldcupCreateRequestDto worldcupCreateRequestDto = WorldcupRequestDto.WorldcupCreateRequestDto.builder()
-                .title(title)
-                .content(content)
-                .password(password).build();
-
-        UserAccount userAccount = UserAccount.builder()
-                .userId("userId")
-                .userName("name")
-                .email("email")
-                .nickName("nickname")
-                .build();
+        Worldcup worldcup = WorldcupFixtures.createDefaultWorldcupWithItemsOf(7L);
+        List<RoundType> expected = Arrays.asList(RoundType.ROUND4);
         // When
-        Worldcup worldcup = sut.createWorldcup(worldcupCreateRequestDto, userAccount);
+        List<RoundType> roundTypes = sut.getSupportedRoundTypes(worldcup);
         // Then
-        assertThat(worldcup).hasFieldOrPropertyWithValue("title", title)
-                .hasFieldOrPropertyWithValue("content", content)
-                .hasFieldOrPropertyWithValue("password", password);
+        assertThat(roundTypes).isEqualTo(expected);
+
     }
 
-    //    @DisplayName("월드컵과 라운드 타입을 제공하면, 해당 라운드 타입이 월드컵에서 지원가능한지 참/거짓 값을 반환한다.")
-//    @Test
-//    void givenWorldcupAndRoundType_whenCheckRoundType_thenReturnBooleanWhetherWorldcupSupportsRoundType() {
-//        // Given
-//
-//        // When
-//
-//        // Then
-//    }
     @DisplayName("월드컵 아이템 개수에 따라, round type이 가능한지에 대한 참/거짓 값을 반환한다.")
     @MethodSource
     @ParameterizedTest(name = "[{index}] item count: {0}, round type: {1} => {2} ")
