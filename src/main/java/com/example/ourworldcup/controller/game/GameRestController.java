@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,21 +24,22 @@ public class GameRestController {
                                                                     @PathVariable Long roundNum) throws Exception {
         roundService.setCurrentRoundOrder(gameId, roundNum);
         roundService.updateGameIfStageEnded(gameId);
+
         Round round = roundService.getRound(gameId);
-        System.out.println("GET!!!!"+ round.toString());
+
         return new ResponseEntity<>(RoundConverter.toRoundResponseBeforeRoundDto(round), HttpStatus.OK);
-//        return ResponseEntity.ok(RoundConverter.toRoundResponseBeforeRoundDto(round));
     }
 
     @PostMapping("/{gameId}/round/{roundNum}")
     public ResponseEntity<Map<String, Boolean>> saveRound(@PathVariable Long gameId,
                                                           @PathVariable Long roundNum,
                                                           @RequestBody RoundRequestDto.RoundResultDto roundResultDto) {
-        System.out.println("ROUNDRESULTDTO!!! "+ roundResultDto);
+
         roundService.saveRoundResult(roundResultDto);
+
         Map<String, Boolean> responseMap = new HashMap<>();
         Boolean isFinished = roundService.checkFinished(gameId);
-        System.out.println("ISFINISHED???: "+isFinished);
+
         responseMap.put("success", true);
         responseMap.put("isFinished", isFinished);
         return new ResponseEntity<>(responseMap, HttpStatus.OK);

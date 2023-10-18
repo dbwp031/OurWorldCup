@@ -10,7 +10,6 @@ import com.example.ourworldcup.converter.game.GameConverter;
 import com.example.ourworldcup.converter.item.ItemConverter;
 import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
-import com.example.ourworldcup.domain.constant.PickType;
 import com.example.ourworldcup.domain.game.Game;
 import com.example.ourworldcup.dto.VsResultDto;
 import com.example.ourworldcup.repository.WorldcupRepository;
@@ -146,14 +145,15 @@ public class WorldcupController {
         return "game/setting";
     }
 
-    @GetMapping("/{worldcupId}/game/new/round/{round}")
-    public String createGame(@PathVariable Long worldcupId,
-                             @PathVariable(value = "round") Long initialRound,
-                             Authentication authentication) {
-        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
-        Game game = gameService.createGame(jwtAuthentication.getPrincipalDetails().getId(), worldcupId, initialRound, PickType.ORDER);
-        return String.format("redirect:/game/%d", game.getId());
-    }
+//    @GetMapping("/{worldcupId}/game/new/round/{round}")
+//    public String createGame(@PathVariable Long worldcupId,
+//                             @PathVariable(value = "round") Long initRound,
+//                             Authentication authentication) {
+//        JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+//        RoundType roundType = RoundTypeConverter.toRoundType(initRound);
+//        Game game = gameService.createGame(jwtAuthentication.getPrincipalDetails().getId(), worldcupId, roundType, PickType.ORDER);
+//        return String.format("redirect:/game/%d", game.getId());
+//    }
 
     @GetMapping("/{worldcupId}/games")
     public String renderGamesPage(@PathVariable Long worldcupId,

@@ -1,9 +1,11 @@
 package com.example.ourworldcup.controller.worldcup;
 
 import com.example.ourworldcup.controller.worldcup.dto.WorldcupResponseDto;
+import com.example.ourworldcup.converter.round.RoundTypeConverter;
 import com.example.ourworldcup.converter.worldcup.WorldcupConverter;
 import com.example.ourworldcup.domain.Worldcup;
 import com.example.ourworldcup.domain.constant.PickType;
+import com.example.ourworldcup.domain.constant.RoundType;
 import com.example.ourworldcup.domain.game.Game;
 import com.example.ourworldcup.domain.userAccount.UserAccount;
 import com.example.ourworldcup.resolver.authUser.AuthUser;
@@ -60,10 +62,17 @@ public class WorldcupRestController {
     }
 
     @PostMapping("/{worldcupId}/game")
-    public ResponseEntity<Map<String, Long>> createGame(@PathVariable Long worldcupId, @RequestParam Long initRound, @AuthUser UserAccount userAccount) {
-        Game game = gameService.createGame(userAccount.getId(), worldcupId, initRound, PickType.ORDER);
+    public ResponseEntity<Map<String, Long>> createGame(@PathVariable Long worldcupId,
+                                                        @RequestParam Long initRound,
+                                                        @AuthUser UserAccount userAccount) {
+        RoundType roundType = RoundTypeConverter.toRoundType(initRound);
+        Worldcup worldcup = worldcupService.findById(worldcupId);
+
+        Game game = gameService.createGame(userAccount, worldcup, roundType, PickType.ORDER);
+
         Map<String, Long> responseMap = new HashMap<>();
         responseMap.put("gameId", game.getId());
+
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 }
