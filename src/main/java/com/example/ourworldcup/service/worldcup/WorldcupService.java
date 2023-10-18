@@ -19,8 +19,8 @@ public interface WorldcupService {
     void enrollUserAccount(Invitation invitation, UserAccount userAccount, MemberRole memberRole);
 
     Worldcup findById(Long worldcupId);
-
-    List<Integer> getRoundTypes(Long id);
-
+    
     Boolean canSupportRoundType(Worldcup worldcup, RoundType roundType);
+
+    List<RoundType> getSupportedRoundTypes(Worldcup worldcup);
 }

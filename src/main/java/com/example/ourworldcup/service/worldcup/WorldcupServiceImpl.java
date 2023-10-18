@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -35,8 +35,8 @@ public class WorldcupServiceImpl implements WorldcupService {
 
     @PersistenceContext
     EntityManager em;
-    private final static Integer MINIMUM_ROUND_TYPE = 4;
-    private final static Integer MAXIMUM_ROUND_TYPE = 64;
+    private static final RoundType MINIMUM_ROUND_TYPE = RoundType.ROUND4;
+    private static final RoundType MAXIMUM_ROUND_TYPE = RoundType.ROUND32;
 
     @Transactional
     @Override
@@ -101,33 +101,22 @@ public class WorldcupServiceImpl implements WorldcupService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 worldcupId가 없습니다."));
     }
 
-    @Override
-    public List<Integer> getRoundTypes(Long id) {
-        em.flush();
-        Worldcup worldcup = this.findById(id);
-        Integer itemsSize = worldcup.getItems().size();
-        System.out.println("itemsSize: " + itemsSize);
-        System.out.println(worldcup);
-        if (itemsSize < MINIMUM_ROUND_TYPE) {
-            throw new IllegalStateException("The number of items in the Worldcup is less than the minimum required.");
-        }
-        List<Integer> roundTypes = new ArrayList<>();
-        Integer dist = MINIMUM_ROUND_TYPE;
-        for (Integer roundType = MINIMUM_ROUND_TYPE; roundType <= MAXIMUM_ROUND_TYPE; roundType += dist) {
-            if (roundType > itemsSize) {
-                break;
-            }
-            roundTypes.add(roundType);
-            dist = roundType;
-        }
-        return roundTypes;
-    }
-
     /*
      *   Worldcup 객체 자체를 받아야 할까? Worldcup의 id를 받아야 할까?
      * */
     @Override
     public Boolean canSupportRoundType(Worldcup worldcup, RoundType roundType) {
         return worldcup.getItems().size() >= roundType.getItemsNum();
+    }
+
+    @Override
+    public List<RoundType> getSupportedRoundTypes(Worldcup worldcup) {
+        return Arrays.stream(RoundType.values())
+                .filter(roundType -> canSupportRoundType(worldcup, roundType))
+                .filter(roundType ->
+                        MAXIMUM_ROUND_TYPE.getStageOrder() <= roundType.getStageOrder() &&
+                                roundType.getStageOrder() <= MINIMUM_ROUND_TYPE.getStageOrder()
+                )
+                .toList();
     }
 }

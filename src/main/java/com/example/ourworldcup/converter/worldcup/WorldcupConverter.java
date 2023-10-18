@@ -79,7 +79,9 @@ public class WorldcupConverter {
     }
 
     public static WorldcupResponseDto.RoundTypesDto toWorldcupResponseRoundTypesDto(Worldcup worldcup) {
-        List<Integer> roundTypes = staticWorldcupService.getRoundTypes(worldcup.getId());
+        List<Integer> roundTypes = staticWorldcupService.getSupportedRoundTypes(worldcup).stream()
+                .map(rt -> rt.getTotalRounds().intValue())
+                .toList();
 
         return WorldcupResponseDto.RoundTypesDto.builder()
                 .id(worldcup.getId())

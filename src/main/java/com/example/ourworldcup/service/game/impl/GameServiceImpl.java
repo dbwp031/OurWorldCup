@@ -13,6 +13,7 @@ import com.example.ourworldcup.repository.GameRepository;
 import com.example.ourworldcup.repository.RoundRepository;
 import com.example.ourworldcup.repository.UserAccountRepository;
 import com.example.ourworldcup.service.game.GameService;
+import com.example.ourworldcup.service.game.itemSelectionPolicy.ItemSelectionPolicyFactory;
 import com.example.ourworldcup.service.item.ItemService;
 import com.example.ourworldcup.service.userAccount.UserAccountService;
 import com.example.ourworldcup.service.worldcup.WorldcupService;
@@ -38,39 +39,39 @@ public class GameServiceImpl implements GameService {
     private final ItemService itemService;
     private final WorldcupService worldcupService;
 
-    @Transactional
-    @Override
-    public Game createGame(Long userAccountId, Long worldcupId, Long initialRound, PickType pickType) {
-
-        if (!worldcupService.getRoundTypes(worldcupId).contains(initialRound.intValue())) {
-            throw new IllegalArgumentException("해당 initialRound는 올바르지 않습니다.");
-        }
-
-        UserAccount userAccount = userAccountService.findById(userAccountId);
-        Worldcup worldcup = worldcupService.findById(worldcupId);
-
-        RoundType initialRoundType = RoundType.getRoundType(initialRound);
-        Game game = Game.builder()
-                .worldcup(worldcup)
-                .player(userAccount)
-                .gameType(GameType.TOURNAMENT)
-                .pickType(pickType)
-                .initialRoundType(initialRoundType)
-                .currentRoundType(initialRoundType)
-                .currentRoundOrder(0L)
-                .nextStageEndRoundOrder(initialRoundType.getTotalRounds())
-                .build();
-
-        List<Round> initializeRounds = this.initializeRounds(worldcup, game, initialRound, pickType);
-        game.addRounds(initializeRounds);
-        gameRepository.save(game);
-        return game;
-    }
+    private final ItemSelectionPolicyFactory itemSelectionPolicyFactory;
 
     @Override
     public Game findById(Long id) {
         return gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game 아이디가 존재하지 않습니다."));
+    }
+
+    @Transactional
+    @Override
+    public Game createGame(UserAccount userAccount, Worldcup worldcup, RoundType roundType, PickType pickType) {
+        if (!worldcupService.getSupportedRoundTypes(worldcup).contains(roundType)) {
+            throw new IllegalArgumentException("해당 roundType이 올바르지 않습니다.");
+        }
+        Game game = Game.builder()
+                .worldcup(worldcup)
+                .player(userAccount)
+                .gameType(GameType.TOURNAMENT)
+                .pickType(pickType)
+                .initialRoundType(roundType)
+                .currentRoundType(roundType)
+                .currentRoundOrder(0L)
+                .nextStageEndRoundOrder(roundType.getTotalRounds())
+                .build();
+
+        List<Round> initializeRounds = this.initializeRounds(worldcup, game, roundType.getTotalRounds(), pickType);
+        /*
+         * Transient상태의 게임을 저장하지 않으면 에러가 난다.
+         * */
+        gameRepository.save(game);
+        game.addRounds(initializeRounds);
+
+        return game;
     }
 
     @Transactional

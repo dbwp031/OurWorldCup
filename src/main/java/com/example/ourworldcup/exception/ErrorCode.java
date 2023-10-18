@@ -46,7 +46,11 @@ public enum ErrorCode {
     /*
      * 초대 관련 에러코드
      * */
-    INVI_NOT_FOUND(BAD_REQUEST, "INVITATION_400_1", "잘못된 초대 토큰입니다");
+    INVI_NOT_FOUND(BAD_REQUEST, "INVITATION_400_1", "잘못된 초대 토큰입니다."),
+    /*
+     * Game 관련 에러코드
+     * */
+    SELECTION_DENIED(BAD_REQUEST, "GAME_400_1", "아이템 선택 기준을 충족하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
